@@ -4,13 +4,14 @@ SRCS	=
 SRCS	:= $(addprefix $(SRC_DIR), $(SRCS))
 OBJS	= $(SRCS:.c=.o)
 LIB		= ./libft/libft.a
-CC		= cc -Wall -Wextra -Werror -Iincludes
+CC		= cc
+CFLAGS	= -Wall -Wextra -Werror -Imlx -Iincludes
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
 	make -C libft
-	$(CC) $(OBJS) $(LIB) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIB) -Lmlx -lmlx -lXext -lX11 -o $(NAME)
 
 clean:
 	rm -rf $(OBJS)
