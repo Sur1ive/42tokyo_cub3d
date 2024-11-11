@@ -1,6 +1,6 @@
 NAME	= cub3D
 SRC_DIR = srcs/
-SRCS	=
+SRCS	= main.c key_handler.c map_checker.c utils.c init.c map.c
 SRCS	:= $(addprefix $(SRC_DIR), $(SRCS))
 OBJS	= $(SRCS:.c=.o)
 LIB		= ./libft/libft.a
@@ -11,7 +11,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	make -C libft
-	$(CC) $(CFLAGS) $(OBJS) $(LIB) -Lmlx -lmlx -lXext -lX11 -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIB) mlx/libmlx_Linux.a -lXext -lX11 -o $(NAME)
 
 clean:
 	rm -rf $(OBJS)
