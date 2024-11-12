@@ -1,34 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/11 23:17:52 by yxu               #+#    #+#             */
-/*   Updated: 2024/11/12 21:35:13 by yxu              ###   ########.fr       */
+/*   Created: 2024/11/12 21:35:16 by yxu               #+#    #+#             */
+/*   Updated: 2024/11/12 22:23:08 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	count_line(char *path)
+void	free_game(t_game *game)
 {
-	int		fd;
-	int		nb;
-	char	*line;
+	(void)game;
+}
 
-	fd = open(path, O_RDONLY);
-	if (fd == -1)
-		return (-1);
-	nb = 0;
-	line = get_next_line(fd);
-	while (line)
+void	clean_exit(int exitcode, char *errmsg, t_game *game)
+{
+	free_game(game);
+	if (exitcode == MANUAL_QUIT)
 	{
-		nb++;
-		free(line);
-		line = get_next_line(fd);
+		printf("Manual quit\n");
+		exit(EXIT_SUCCESS);
 	}
-	close(fd);
-	return (nb);
+	else
+	{
+		ft_dprintf(STDERR_FILENO, "Error\n%s\n", errmsg);
+		exit(EXIT_FAILURE);
+	}
+}
+
+int	destory_win(t_game *game)
+{
+	clean_exit(MANUAL_QUIT, "Manual exit\n", game);
+	return (0);
 }

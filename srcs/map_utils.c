@@ -1,34 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   map_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/11 23:17:52 by yxu               #+#    #+#             */
-/*   Updated: 2024/11/12 21:35:13 by yxu              ###   ########.fr       */
+/*   Created: 2023/10/28 17:04:34 by yxu               #+#    #+#             */
+/*   Updated: 2024/11/12 21:34:43 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	count_line(char *path)
+int	print_map(char **map)
 {
-	int		fd;
-	int		nb;
-	char	*line;
+	int	x;
 
-	fd = open(path, O_RDONLY);
-	if (fd == -1)
-		return (-1);
-	nb = 0;
-	line = get_next_line(fd);
-	while (line)
+	if (map == NULL)
+		return (0);
+	x = 0;
+	while (map[x])
 	{
-		nb++;
-		free(line);
-		line = get_next_line(fd);
+		printf("%s\n", map[x]);
+		x++;
 	}
-	close(fd);
-	return (nb);
+	printf("\n");
+	return (0);
+}
+
+int	free_map(char **map)
+{
+	int	x;
+
+	if (map == NULL)
+		return (0);
+	x = 0;
+	while (map[x])
+	{
+		free(map[x]);
+		x++;
+	}
+	free(map);
+	return (0);
 }
