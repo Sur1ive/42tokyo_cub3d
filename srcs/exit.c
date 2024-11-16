@@ -6,15 +6,20 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 21:35:16 by yxu               #+#    #+#             */
-/*   Updated: 2024/11/12 22:23:08 by yxu              ###   ########.fr       */
+/*   Updated: 2024/11/16 19:27:24 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	free_game(t_game *game)
+static void	free_game(t_game *game)
 {
-	(void)game;
+	free_map(game);
+	if (game->mlx && game->win)
+		mlx_destroy_window(game->mlx, game->win);
+	if (game->mlx)
+		mlx_destroy_display(game->mlx);
+	free(game->mlx);
 }
 
 void	clean_exit(int exitcode, char *errmsg, t_game *game)
@@ -32,7 +37,7 @@ void	clean_exit(int exitcode, char *errmsg, t_game *game)
 	}
 }
 
-int	destory_win(t_game *game)
+int	close_win_handler(t_game *game)
 {
 	clean_exit(MANUAL_QUIT, "Manual exit\n", game);
 	return (0);

@@ -6,11 +6,24 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 23:17:52 by yxu               #+#    #+#             */
-/*   Updated: 2024/11/12 21:35:13 by yxu              ###   ########.fr       */
+/*   Updated: 2024/11/16 19:09:42 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+// free char **
+void	free2(char **p)
+{
+	int	i;
+
+	if (p == NULL)
+		return ;
+	i = 0;
+	while (p[i])
+		free(p[i++]);
+	free(p);
+}
 
 int	count_line(char *path)
 {
