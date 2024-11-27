@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
+/*   By: nakagawashinta <nakagawashinta@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 16:49:56 by yxu               #+#    #+#             */
-/*   Updated: 2024/11/16 19:34:12 by yxu              ###   ########.fr       */
+/*   Updated: 2024/11/27 15:38:59 by nakagawashi      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ static void	game_preset(t_game *game)
 
 static void	init_map_and_player(char *map_path, t_game *game)
 {
+	int i;
+	
 	game->map.rows = count_line(map_path);
 	game->map.layout = read_map(map_path, game);
 	check_map(game);
