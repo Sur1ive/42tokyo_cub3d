@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:31:14 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/01 13:27:43 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/01 14:01:19 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@
 # define WIN_HEIGHT 1080
 
 // element id
-# define EID_WALL_N {'N', 'O'}
-# define EID_WALL_S {'S', 'O'}
-# define EID_WALL_W {'W', 'E'}
-# define EID_WALL_E {'E', 'A'}
-# define EID_FLOOR {'F', '\0'}
-# define EID_CEILING {'C', '\0'}
+# define EID_WALL_N (unsigned char[]){'N', 'O'}
+# define EID_WALL_S (unsigned char[]){'S', 'O'}
+# define EID_WALL_W (unsigned char[]){'W', 'E'}
+# define EID_WALL_E (unsigned char[]){'E', 'A'}
+# define EID_FLOOR (unsigned char[]){'F', '\0'}
+# define EID_CEILING (unsigned char[]){'C', '\0'}
 
 typedef struct s_image
 {
@@ -101,8 +101,8 @@ void	clean_exit(int exitcode, char *errmsg, t_game *game);
 // map tools
 void	free_map(t_game *game);
 void	print_layout(char **layout);
-t_image	*get_texture_with_id(t_element *elements, unsigned char id[2]);
-void	read_texture(t_game *game, char *filepath, unsigned char id[2]);
+void	*get_texture_with_id(t_game *game, unsigned char id[2]);
+void	load_texture(t_game *game, char *filepath, unsigned char id[2]);
 void	mock_map_maker(t_game *game);
 
 // tools

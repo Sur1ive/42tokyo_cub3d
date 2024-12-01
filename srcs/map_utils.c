@@ -6,18 +6,21 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 17:04:34 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/01 13:30:34 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/01 14:08:23 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-t_image	*get_texture_with_id(t_element *elements, unsigned char id[2])
+void	*get_texture_with_id(t_game *game, unsigned char id[2])
 {
+	t_element	*elements;
+
+	elements = game->map.elements;
 	while (elements)
 	{
 		if (elements->id[0] == id[0] && elements->id[1] == id[1])
-			return (&elements->texture);
+			return (elements->texture.img);
 		elements = elements->next;
 	}
 	return (NULL);
@@ -55,7 +58,7 @@ void	free_map(t_game *game)
 	free2(game->map.layout);
 }
 
-void	read_texture(t_game *game, char *filepath, unsigned char id[2])
+void	load_texture(t_game *game, char *filepath, unsigned char id[2])
 {
 	t_element	*element;
 
@@ -65,7 +68,7 @@ void	read_texture(t_game *game, char *filepath, unsigned char id[2])
 	element->texture.img = mlx_xpm_file_to_image(game->mlx,
 			filepath, &element->texture.width, &element->texture.height);
 	if (element->texture.img == NULL)
-		clean_exit(INIT_ERR, "error while reading textures", game);
+		clean_exit(INIT_ERR, "error when loading textures", game);
 	element->id[0] = id[0];
 	element->id[1] = id[1];
 	element->next = game->map.elements;
@@ -81,10 +84,13 @@ void	mock_map_maker(t_game *game)
 	game->map.layout[2] = ft_strdup("111");
 	game->map.rows = 3;
 	game->map.cols = 3;
-	read_texture(game, "textures/Textures-1.xpm", (unsigned char[])EID_WALL_N);
-	read_texture(game, "textures/Textures-2.xpm", (unsigned char[])EID_WALL_S);
-	read_texture(game, "textures/Textures-3.xpm", (unsigned char[])EID_WALL_W);
-	read_texture(game, "textures/Textures-4.xpm", (unsigned char[])EID_WALL_E);
-	read_texture(game, "textures/Textures-5.xpm", (unsigned char[])EID_CEILING);
-	read_texture(game, "textures/Textures-6.xpm", (unsigned char[])EID_FLOOR);
+	load_texture(game, "textures/Textures-1.xpm", EID_WALL_N);
+	load_texture(game, "textures/Textures-2.xpm", EID_WALL_S);
+	load_texture(game, "textures/Textures-3.xpm", EID_WALL_W);
+	load_texture(game, "textures/Textures-4.xpm", EID_WALL_E);
+	load_texture(game, "textures/Textures-5.xpm", EID_CEILING);
+	load_texture(game, "textures/Textures-6.xpm", EID_FLOOR);
+	game->player.orientation = 'N';
+	game->player.x = 1;
+	game->player.y = 1;
 }
