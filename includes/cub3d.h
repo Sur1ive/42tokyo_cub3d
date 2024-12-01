@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:31:14 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/01 14:01:19 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/01 16:10:14 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,20 @@
 # define MAX_MAP_COLS 100
 # define WIN_WIDTH 1920
 # define WIN_HEIGHT 1080
+# define FOV 90
 
 // element id
 # define EID_WALL_N (unsigned char[]){'N', 'O'}
 # define EID_WALL_S (unsigned char[]){'S', 'O'}
 # define EID_WALL_W (unsigned char[]){'W', 'E'}
 # define EID_WALL_E (unsigned char[]){'E', 'A'}
-# define EID_FLOOR (unsigned char[]){'F', '\0'}
-# define EID_CEILING (unsigned char[]){'C', '\0'}
+// # define EID_FLOOR (unsigned char[]){'F', '\0'}
+// # define EID_CEILING (unsigned char[]){'C', '\0'}
 
 typedef struct s_image
 {
 	void	*img;
+	char	*addr;
 	int		width;
 	int		height;
 	int		bits_per_pixel;
@@ -65,14 +67,16 @@ typedef struct s_map
 	char		**layout;
 	int			rows;
 	int			cols;
+	int			floor_color;
+	int			ceiling_color;
 	t_element	*elements;
 }	t_map;
 
 typedef struct s_player
 {
-	int		x;
-	int		y;
-	char	orientation;
+	double	x;
+	double	y;
+	char	direction;
 }	t_player;
 
 typedef struct s_game
@@ -108,5 +112,6 @@ void	mock_map_maker(t_game *game);
 // tools
 int		count_line(char *path);
 void	free2(char **p);
+int		create_trgb(int t, int r, int g, int b);
 
 #endif

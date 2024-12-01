@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 17:04:34 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/01 14:08:23 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/01 16:15:53 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,11 @@ void	mock_map_maker(t_game *game)
 	load_texture(game, "textures/Textures-2.xpm", EID_WALL_S);
 	load_texture(game, "textures/Textures-3.xpm", EID_WALL_W);
 	load_texture(game, "textures/Textures-4.xpm", EID_WALL_E);
-	load_texture(game, "textures/Textures-5.xpm", EID_CEILING);
-	load_texture(game, "textures/Textures-6.xpm", EID_FLOOR);
-	game->player.orientation = 'N';
-	game->player.x = 1;
-	game->player.y = 1;
+	game->map.ceiling_color = create_trgb(0, 102, 170, 255);
+	game->map.floor_color = create_trgb(0, 99, 62, 0);
+	// load_texture(game, "textures/Textures-5.xpm", EID_CEILING);
+	// load_texture(game, "textures/Textures-6.xpm", EID_FLOOR);
+	game->player.direction = 'N';
+	game->player.x = 1.5;
+	game->player.y = 1.5;
 }
