@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 16:49:56 by yxu               #+#    #+#             */
-/*   Updated: 2024/11/16 19:34:12 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/01 13:00:04 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ void	init_game(char *map_path, t_game *game)
 	init_map_and_player(map_path, game);
 	game->mlx = mlx_init();
 	if (game->mlx == NULL)
-		clean_exit(ERR, "MLX initialization failed", game);
+		clean_exit(INIT_ERR, "MLX initialization failed", game);
 	game->win = mlx_new_window(game->mlx, WIN_WIDTH, WIN_HEIGHT, "cub3d");
 	if (game->win == NULL)
-		clean_exit(ERR, "MLX initialization failed", game);
+		clean_exit(INIT_ERR, "MLX initialization failed", game);
 }

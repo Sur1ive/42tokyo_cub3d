@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 12:01:40 by yxu               #+#    #+#             */
-/*   Updated: 2024/11/15 12:01:51 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/01 12:59:45 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ static int	check_ext(char *path)
 void	argv_checker(int argc, char **argv)
 {
 	if (argc != 2)
-		clean_exit(ERR, "Invalid arguments number", NULL);
+		clean_exit(INIT_ERR, "Invalid arguments number", NULL);
 	if (check_ext(argv[1]))
-		clean_exit(ERR, "Invalid file extension, use .cub", NULL);
+		clean_exit(INIT_ERR, "Invalid file extension, use .cub", NULL);
 }
 

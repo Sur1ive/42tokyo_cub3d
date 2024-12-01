@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:31:14 by yxu               #+#    #+#             */
-/*   Updated: 2024/11/16 19:37:13 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/01 13:27:43 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@
 
 // exit_code
 # define MANUAL_QUIT 0
-# define ERR 1
+# define INIT_ERR 1
+# define RUN_ERR 2
 
 // game config
 # define MAX_MAP_ROWS 100
@@ -35,12 +36,12 @@
 # define WIN_HEIGHT 1080
 
 // element id
-# define EID_WALL_N "NO"
-# define EID_WALL_S "SO"
-# define EID_WALL_W "WE"
-# define EID_WALL_E "EA"
-# define EID_FLOOR "F"
-# define EID_CEILING "C"
+# define EID_WALL_N {'N', 'O'}
+# define EID_WALL_S {'S', 'O'}
+# define EID_WALL_W {'W', 'E'}
+# define EID_WALL_E {'E', 'A'}
+# define EID_FLOOR {'F', '\0'}
+# define EID_CEILING {'C', '\0'}
 
 typedef struct s_image
 {
@@ -101,6 +102,8 @@ void	clean_exit(int exitcode, char *errmsg, t_game *game);
 void	free_map(t_game *game);
 void	print_layout(char **layout);
 t_image	*get_texture_with_id(t_element *elements, unsigned char id[2]);
+void	read_texture(t_game *game, char *filepath, unsigned char id[2]);
+void	mock_map_maker(t_game *game);
 
 // tools
 int		count_line(char *path);
