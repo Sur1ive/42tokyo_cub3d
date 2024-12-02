@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:31:14 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/03 00:13:02 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/03 01:58:52 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@
 # define WIN_HEIGHT 1080
 # define GAME_FOV 2 * PI / 3
 # define GAME_FINENESS 1920
+# define PLAYER_SIZE 0.2
+# define MOVE_SPEED 0.1
 
 // element id
 # define EID_WALL_N (unsigned char[]){'N', 'O'}

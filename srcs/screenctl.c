@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 22:41:58 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/03 01:07:38 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/03 01:46:10 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ double	*ray_casting(t_map map, t_player player)
 	i = 0;
 	while (i < GAME_FINENESS)
 	{
-		direction = player.direction + GAME_FOV / GAME_FINENESS * i ;
+		direction = player.direction - GAME_FOV / 2 + GAME_FOV / GAME_FINENESS * i ;
 		ray_distance_array[i] = calculate_ray_distance(map, player.x, player.y, direction);
 		// printf("direction: %.2f distance: %.2f\n", direction, ray_distance_array[i]);
 		i++;

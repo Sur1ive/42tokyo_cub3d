@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 17:04:34 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/02 20:52:59 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/03 01:47:27 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	mock_map_maker(t_game *game)
 	game->map.floor_color = create_trgb(0, 99, 62, 0);
 	// load_texture(game, "textures/Textures-5.xpm", EID_CEILING);
 	// load_texture(game, "textures/Textures-6.xpm", EID_FLOOR);
-	game->player.direction = 2 * PI - GAME_FOV / 2;  // EA
+	game->player.direction = 0;
 	game->player.x = 1.5;
 	game->player.y = 1.5;
 }
