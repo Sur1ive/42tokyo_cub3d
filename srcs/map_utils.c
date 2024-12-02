@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 17:04:34 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/01 16:15:53 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/02 20:52:59 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,14 @@ void	load_texture(t_game *game, char *filepath, unsigned char id[2])
 
 void	mock_map_maker(t_game *game)
 {
-	game->map.layout = (char **)malloc(4 * sizeof(char *));
-	game->map.layout[3] = NULL;
-	game->map.layout[0] = ft_strdup("111");
-	game->map.layout[1] = ft_strdup("1N1");
-	game->map.layout[2] = ft_strdup("111");
-	game->map.rows = 3;
-	game->map.cols = 3;
+	game->map.layout = (char **)malloc(5 * sizeof(char *));
+	game->map.layout[4] = NULL;
+	game->map.layout[0] = ft_strdup("11111111");
+	game->map.layout[1] = ft_strdup("1N000001");
+	game->map.layout[2] = ft_strdup("10010011");
+	game->map.layout[3] = ft_strdup("11111111");
+	game->map.rows = 4;
+	game->map.cols = 8;
 	load_texture(game, "textures/Textures-1.xpm", EID_WALL_N);
 	load_texture(game, "textures/Textures-2.xpm", EID_WALL_S);
 	load_texture(game, "textures/Textures-3.xpm", EID_WALL_W);
@@ -92,7 +93,7 @@ void	mock_map_maker(t_game *game)
 	game->map.floor_color = create_trgb(0, 99, 62, 0);
 	// load_texture(game, "textures/Textures-5.xpm", EID_CEILING);
 	// load_texture(game, "textures/Textures-6.xpm", EID_FLOOR);
-	game->player.direction = 'N';
+	game->player.direction = 2 * PI - GAME_FOV / 2;  // EA
 	game->player.x = 1.5;
 	game->player.y = 1.5;
 }

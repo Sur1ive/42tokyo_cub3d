@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:31:14 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/01 16:10:14 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/03 00:13:02 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include <X11/X.h>
 # include <X11/keysym.h>
 
+#define PI 3.141592653589793
+
 // exit_code
 # define MANUAL_QUIT 0
 # define INIT_ERR 1
@@ -34,7 +36,8 @@
 # define MAX_MAP_COLS 100
 # define WIN_WIDTH 1920
 # define WIN_HEIGHT 1080
-# define FOV 90
+# define GAME_FOV 2 * PI / 3
+# define GAME_FINENESS 1920
 
 // element id
 # define EID_WALL_N (unsigned char[]){'N', 'O'}
@@ -76,7 +79,7 @@ typedef struct s_player
 {
 	double	x;
 	double	y;
-	char	direction;
+	double	direction;
 }	t_player;
 
 typedef struct s_game
@@ -86,6 +89,12 @@ typedef struct s_game
 	t_map		map;
 	t_player	player;
 }	t_game;
+
+typedef struct s_point {
+double	x;
+double	y;
+double	z;
+}	t_point;
 
 // init
 void	argv_checker(int argc, char **argv);
@@ -102,16 +111,20 @@ int		screenctl(t_game *game);
 int		close_win_handler(t_game *game);
 void	clean_exit(int exitcode, char *errmsg, t_game *game);
 
-// map tools
+// map utils
 void	free_map(t_game *game);
 void	print_layout(char **layout);
 void	*get_texture_with_id(t_game *game, unsigned char id[2]);
 void	load_texture(t_game *game, char *filepath, unsigned char id[2]);
 void	mock_map_maker(t_game *game);
 
-// tools
+// image utils
+int		create_trgb(int t, int r, int g, int b);
+void	ft_mlx_pixel_put(t_image *image, int x, int y, int color);
+
+// utils
 int		count_line(char *path);
 void	free2(char **p);
-int		create_trgb(int t, int r, int g, int b);
+double	limit_angle(double angle);
 
 #endif
