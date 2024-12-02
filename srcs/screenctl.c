@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 22:41:58 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/03 00:02:50 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/03 01:07:38 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,38 +33,23 @@ void	draw_background(t_image *frame, int floor_color, int ceiling_color)
 	}
 }
 
-void compute_next_intersection(double* x, double* y, double direction, double origin_x, double origin_y) {
+void compute_next_intersection(double* x, double* y, double direction)
+{
 	direction = limit_angle(direction);
     double k = tan(direction);
     double dx = floor(*x + 1) - *x;
     double dy = floor(*y + 1) - *y;
+	double origin_x = *x;
+	double origin_y = *y;
 
-	if (direction > -PI / 2 && direction < PI / 2)
-	{
-		if (k * dx - dy > 0)
-		{
-			*y = floor(*y + 1);
-			*x = origin_x + (*y - origin_y) / k;
-		}
-		if (k * dx - dy < -1)
-		{
-			*y = ceil(*y - 1);
-			*x = origin_x + (*y - origin_y) / k;
-		}
-		else
-		{
-			*x = floor(*x + 1);
-			*y = origin_y + (*x - origin_x) * k;
-		}
-	}
-	else
+	if (direction > PI / 2 && direction < PI * 3 / 2)
 	{
 		if (-k * dx - dy > 0)
 		{
 			*y = floor(*y + 1);
 			*x = origin_x + (*y - origin_y) / k;
 		}
-		if (k * dx - dy < -1)
+		else if (-k * dx - dy < -1)
 		{
 			*y = ceil(*y - 1);
 			*x = origin_x + (*y - origin_y) / k;
@@ -72,6 +57,24 @@ void compute_next_intersection(double* x, double* y, double direction, double or
 		else
 		{
 			*x = ceil(*x - 1);
+			*y = origin_y + (*x - origin_x) * k;
+		}
+	}
+	else
+	{
+		if (k * dx - dy > 0)
+		{
+			*y = floor(*y + 1);
+			*x = origin_x + (*y - origin_y) / k;
+		}
+		else if (k * dx - dy < -1)
+		{
+			*y = ceil(*y - 1);
+			*x = origin_x + (*y - origin_y) / k;
+		}
+		else
+		{
+			*x = floor(*x + 1);
 			*y = origin_y + (*x - origin_x) * k;
 		}
 	}
@@ -89,8 +92,8 @@ double calculate_ray_distance(t_map map, double origin_x, double origin_y, doubl
 	y = origin_y;
 	while (1)
 	{
-		compute_next_intersection(&x, &y, direction, origin_x, origin_y);
-		printf("x: %.2f, y: %.2f\n", x, y);
+		compute_next_intersection(&x, &y, direction);
+		// printf("x: %.2f, y: %.2f\n", x, y);
 		if (floor(x) == x)
 		{
 			y1 = floor(y);
@@ -107,7 +110,7 @@ double calculate_ray_distance(t_map map, double origin_x, double origin_y, doubl
 			else
 				y1 = y - 1;
 		}
-		printf("x1: %d, y1: %d\n", x1, y1);
+		// printf("x1: %d, y1: %d\n", x1, y1);
 		if (y1 < 0 || x1 >= map.cols || y1 < 0 || y1 >= map.rows)
 			return(INFINITY);
 		if (map.layout[y1][x1] == '1')
@@ -127,7 +130,7 @@ double	*ray_casting(t_map map, t_player player)
 	{
 		direction = player.direction + GAME_FOV / GAME_FINENESS * i ;
 		ray_distance_array[i] = calculate_ray_distance(map, player.x, player.y, direction);
-		printf("direction: %.2f distance: %.2f\n", direction, ray_distance_array[i]);
+		// printf("direction: %.2f distance: %.2f\n", direction, ray_distance_array[i]);
 		i++;
 	}
 	return (ray_distance_array);
