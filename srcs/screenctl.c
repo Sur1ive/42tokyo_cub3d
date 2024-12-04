@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 22:41:58 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/04 16:11:05 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/04 16:38:41 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ double	*ray_casting(t_map map, t_player player)
 	i = 0;
 	while (i < GAME_FINENESS)
 	{
-		direction = player.direction - GAME_FOV / 2 + GAME_FOV / GAME_FINENESS * i ;
+		direction = player.direction + atan((i - GAME_FINENESS / 2) * 2 * tan(GAME_FOV / 2) / GAME_FINENESS);
 		ray_distance_array[i] = calculate_ray_distance(map, player.x, player.y, direction);
 		// printf("direction: %.2f distance: %.2f\n", direction, ray_distance_array[i]);
 		i++;
@@ -167,16 +167,15 @@ void	draw_wall(t_image *frame, t_game *game)
 		if (ray_distance_array[i] == 0)
 			height = INFINITY;
 		else
-			height = 1.0 / (2 * ray_distance_array[i] * tan(GAME_FOV / 2)) * WIN_WIDTH / cos(i * GAME_FOV / GAME_FINENESS - GAME_FOV / 2);
+			height = 1.0 / (2 * ray_distance_array[i] * tan(GAME_FOV / 2)) * WIN_WIDTH / cos(atan((i - GAME_FINENESS / 2) * 2 * tan(GAME_FOV / 2) / GAME_FINENESS));
 		if (height >= WIN_HEIGHT)
 			height = WIN_HEIGHT;
-		midpoint.x = (0.5 + tan(i * GAME_FOV / GAME_FINENESS - GAME_FOV / 2) / (2 * tan(GAME_FOV / 2))) * WIN_WIDTH;
+		midpoint.x = i;
 		midpoint.y = WIN_HEIGHT / 2;
 		p1.x = midpoint.x;
 		p1.y = midpoint.y - height / 2;
 		p2.x = midpoint.x;
 		p2.y = midpoint.y + height / 2;
-		// printf("p1x: %d, p1y: %d, p2x: %d, p2y: %d\n", (int)p1.x, (int)p1.y, (int)p2.x, (int)p2.y);
 		drawline(frame, p1, p2, create_trgb(0, 10 * ray_distance_array[i], 10 * ray_distance_array[i], 10 * ray_distance_array[i]));
 		i++;
 	}
