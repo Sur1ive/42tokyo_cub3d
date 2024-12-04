@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 22:08:17 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/03 00:01:01 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/04 14:23:35 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	ft_mlx_pixel_put(t_image *image, int x, int y, int color)
 {
 	char	*dst;
 
-	dst = image->addr + (y * image->line_length + x * (image->bits_per_pixel / 8));
+	dst = image->addr
+		+ y * image->line_length + x * (image->bits_per_pixel / 8);
 	*(int *)dst = color;
 }

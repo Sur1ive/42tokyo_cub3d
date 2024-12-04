@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:31:14 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/03 01:58:52 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/04 16:15:52 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <X11/X.h>
 # include <X11/keysym.h>
 
-#define PI 3.141592653589793
+# define PI 3.141592653589793
 
 // exit_code
 # define MANUAL_QUIT 0
@@ -36,7 +36,7 @@
 # define MAX_MAP_COLS 100
 # define WIN_WIDTH 1920
 # define WIN_HEIGHT 1080
-# define GAME_FOV 2 * PI / 3
+# define GAME_FOV 2 * PI / 4
 # define GAME_FINENESS 1920
 # define PLAYER_SIZE 0.2
 # define MOVE_SPEED 0.1
@@ -92,10 +92,11 @@ typedef struct s_game
 	t_player	player;
 }	t_game;
 
-typedef struct s_point {
-double	x;
-double	y;
-double	z;
+typedef struct s_point
+{
+	double	x;
+	double	y;
+	double	z;
 }	t_point;
 
 // init
