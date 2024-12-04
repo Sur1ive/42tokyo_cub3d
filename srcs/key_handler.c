@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 18:01:27 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/03 22:18:26 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/04 16:59:12 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,18 @@ t_player	limit_move(t_map map, t_player player)
 
 	x = player.x;
 	y = player.y;
-	if (map.layout[(int)y][(int)round(x)] == '1'
-		&& fabs(x - round(x)) < PLAYER_SIZE)
+	if (fabs(x - round(x)) < PLAYER_SIZE)
 	{
-		if (x > round(x))
+		if (x > round(x) && map.layout[(int)y][(int)round(x) - 1] == '1')
 			player.x = round(x) + PLAYER_SIZE;
-		else
+		else if (x < round(x) && map.layout[(int)y][(int)round(x)] == '1')
 			player.x = round(x) - PLAYER_SIZE;
 	}
-	if (map.layout[(int)round(y)][(int)x] == '1'
-		&& fabs(y - round(y)) < PLAYER_SIZE)
+	if (fabs(y - round(y)) < PLAYER_SIZE)
 	{
-		if (y > round(y))
+		if (y > round(y) && map.layout[(int)round(y) - 1][(int)x] == '1')
 			player.y = round(y) + PLAYER_SIZE;
-		else
+		else if (y < round(y) && map.layout[(int)round(y)][(int)x] == '1')
 			player.y = round(y) - PLAYER_SIZE;
 	}
 	return (player);
