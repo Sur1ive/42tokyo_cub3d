@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   screenctl.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
+/*   By: yxu <yxu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 22:41:58 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/04 16:38:41 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/07 15:37:29 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,35 @@ void	draw_background(t_image *frame, int floor_color, int ceiling_color)
 
 void	compute_next_intersection(double *x, double *y, double direction)
 {
+	const double epsilon = 1e-6;
 	const double	k = tan(direction);
+	direction = limit_angle(direction);
+	if (*x == floor(*x))
+	{
+		if (direction > PI / 2 && direction < PI * 3 / 2)
+			*x -= epsilon;
+		else
+			*x += epsilon;
+	}
+	if (*y == floor(*y))
+	{
+		if (direction > PI)
+			*y -= epsilon;
+		else
+			*y += epsilon;
+	}
+
 	double	dx = floor(*x + 1) - *x;
 	double	dy = floor(*y + 1) - *y;
 	double	origin_x = *x;
 	double	origin_y = *y;
 
-	direction = limit_angle(direction);
+if (direction > PI / 2 && direction < PI * 3 / 2)
+	dx = 1 - dx;
+// if (direction > PI)
+// 	dy = 1 - dy;
+
+
 	if (direction > PI / 2 && direction < PI * 3 / 2)
 	{
 		if (-k * dx - dy > 0)
@@ -93,7 +115,6 @@ double	calculate_ray_distance(t_map map, double origin_x, double origin_y, doubl
 	while (1)
 	{
 		compute_next_intersection(&x, &y, direction);
-		// printf("x: %.2f, y: %.2f\n", x, y);
 		if (floor(x) == x)
 		{
 			y1 = floor(y);
@@ -110,7 +131,6 @@ double	calculate_ray_distance(t_map map, double origin_x, double origin_y, doubl
 			else
 				y1 = y - 1;
 		}
-		// printf("x1: %d, y1: %d\n", x1, y1);
 		if (x1 < 0 || x1 >= map.cols || y1 < 0 || y1 >= map.rows)
 			return (INFINITY);
 		if (map.layout[y1][x1] == '1')
@@ -130,7 +150,6 @@ double	*ray_casting(t_map map, t_player player)
 	{
 		direction = player.direction + atan((i - GAME_FINENESS / 2) * 2 * tan(GAME_FOV / 2) / GAME_FINENESS);
 		ray_distance_array[i] = calculate_ray_distance(map, player.x, player.y, direction);
-		// printf("direction: %.2f distance: %.2f\n", direction, ray_distance_array[i]);
 		i++;
 	}
 	return (ray_distance_array);
