@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 22:41:58 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/07 15:37:29 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/07 17:12:10 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,10 @@ void	draw_background(t_image *frame, int floor_color, int ceiling_color)
 	}
 }
 
-void	compute_next_intersection(double *x, double *y, double direction)
+void	offset_from_gridline(double *x, double *y, double direction)
 {
-	const double epsilon = 1e-6;
-	const double	k = tan(direction);
-	direction = limit_angle(direction);
+	const double	epsilon = 1e-6;
+
 	if (*x == floor(*x))
 	{
 		if (direction > PI / 2 && direction < PI * 3 / 2)
@@ -52,11 +51,20 @@ void	compute_next_intersection(double *x, double *y, double direction)
 		else
 			*y += epsilon;
 	}
+}
+
+
+void	to_next_intersection(double *x, double *y, double direction)
+{
+	const double	k = tan(direction);
+	double	origin_x = *x;
+	double	origin_y = *y;
+
+	direction = limit_angle(direction);
+	offset_from_gridline(x, y, direction);
 
 	double	dx = floor(*x + 1) - *x;
 	double	dy = floor(*y + 1) - *y;
-	double	origin_x = *x;
-	double	origin_y = *y;
 
 if (direction > PI / 2 && direction < PI * 3 / 2)
 	dx = 1 - dx;
@@ -114,7 +122,7 @@ double	calculate_ray_distance(t_map map, double origin_x, double origin_y, doubl
 	y = origin_y;
 	while (1)
 	{
-		compute_next_intersection(&x, &y, direction);
+		to_next_intersection(&x, &y, direction);
 		if (floor(x) == x)
 		{
 			y1 = floor(y);
