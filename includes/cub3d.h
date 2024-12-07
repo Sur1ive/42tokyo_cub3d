@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
+/*   By: yxu <yxu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:31:14 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/04 16:15:52 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/07 18:56:30 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,10 @@ void	mock_map_maker(t_game *game);
 // image utils
 int		create_trgb(int t, int r, int g, int b);
 void	ft_mlx_pixel_put(t_image *image, int x, int y, int color);
+
+// ray casting utils
+void	to_next_intersection(double *x, double *y, double direction);
+double	*ray_casting(t_map map, t_player player);
 
 // utils
 int		count_line(char *path);
