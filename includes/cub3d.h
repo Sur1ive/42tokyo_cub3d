@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:31:14 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/07 18:56:30 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/07 20:02:51 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@
 # define GAME_FOV 2 * PI / 4
 # define GAME_FINENESS 1920
 # define PLAYER_SIZE 0.2
-# define MOVE_SPEED 0.1
+# define MOVE_SPEED 0.05
+# define CAMERA_TURN_SPEED 0.05
 
 // element id
 # define EID_WALL_N (unsigned char[]){'N', 'O'}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_handler.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
+/*   By: yxu <yxu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 18:01:27 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/04 16:59:12 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/07 20:04:55 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,10 @@ int	key_handler(int key, t_game *game)
 		game->player = limit_move(game->map, player);
 	}
 	if (key == K_AR_L)
-		game->player.direction = limit_angle(game->player.direction - 0.1);
+		game->player.direction = limit_angle(
+				game->player.direction - CAMERA_TURN_SPEED);
 	if (key == K_AR_R)
-		game->player.direction = limit_angle(game->player.direction + 0.1);
+		game->player.direction = limit_angle(
+				game->player.direction + CAMERA_TURN_SPEED);
 	return (0);
 }
