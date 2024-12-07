@@ -34,11 +34,47 @@ static void	check_map_load(char **map, t_game *game)
 	}
 }
 
+static void fill_map(char **map, int cols)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (map[i])
+	{
+		j = ft_strlen(map[i]);
+		while (j < cols)
+		{
+			map[i][j] = '1';
+			j++;
+		}
+		map[i][j] = '\0';
+		i++;
+	}
+}
+
+static int	get_max_cols(char **layout)
+{
+	int	cols;
+	int	i;
+
+	i = 0;
+	cols = 0;
+	while (layout[i])
+	{
+		if (cols < ft_strlen(layout[i]))
+			cols = ft_strlen(layout[i]);
+		i++;
+	}
+	return (cols);
+}
+
 char	**read_map(char *path, t_game *game)
 {
 	int		fd;
 	char	**map;
 	int		i;
+	char	*line;
 
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
@@ -51,12 +87,22 @@ char	**read_map(char *path, t_game *game)
 	}
 	map[game->map.rows] = NULL;
 	i = 0;
+	line = NULL;
+	while (is_element(line) || line[0] == '\n')
+	{
+		free(line);
+		line = get_next_line(fd);
+	}
 	while (i < game->map.rows)
-		map[i++] = get_next_line(fd);
+	{
+		map[i++] = line;
+		line = get_next_line(fd);
+	}
 	close(fd);
 	check_map_load(map, game);
-	i--;
 	while (--i >= 0)
 		map[i][ft_strlen(map[i]) - 1] = '\0';
+	game->map.cols = get_max_cols(map);
+	fill_map(map, game->map.cols);
 	return (map);
 }

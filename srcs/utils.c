@@ -37,7 +37,10 @@ int	count_line(char *path)
 	nb = 0;
 	line = get_next_line(fd);
 	while (is_element(line) || line[0] == '\n')
+	{
+		free(line);
 		line = get_next_line(fd);
+	}
 	while (line)
 	{
 		nb++;

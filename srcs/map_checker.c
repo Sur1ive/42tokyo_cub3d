@@ -25,7 +25,7 @@ char	check_map_obj(char **layout)
 		y = 0;
 		while (layout[x][y])
 		{
-			if (!ft_strchr("01NSEW", layout[x][y])
+			if (!ft_strchr("01NSEW \n", layout[x][y])
 				|| (ft_strchr("NSEW", layout[x][y]) && spawn_direction))
 				return ('\0');
 			if (ft_strchr("NSEW", layout[x][y]) && !spawn_direction)
@@ -37,10 +37,48 @@ char	check_map_obj(char **layout)
 	return (spawn_direction);
 }
 
-static int	check_map_wall(char **layout, int rows)
+static bool	floodfill(t_game *game, char **filled_map, int x, int y)
 {
-	(void)layout;
-	(void)rows;
+	bool	is_surrounded;
+
+	if (x < 0 || y < 0 || game->map.rows <= y || game->map.cols <= x)
+		return (false);
+	if (filled_map[y][x] == '1')
+		return (true);
+	if (filled_map[y][x] != '0')
+		return (true);
+	filled_map[y][x] = '*';
+	is_surrounded = true;
+	is_surrounded &= floodfill(game, filled_map, x + 1, y);
+	is_surrounded &= floodfill(game, filled_map, x - 1, y);
+	is_surrounded &= floodfill(game, filled_map, x, y + 1);
+	is_surrounded &= floodfill(game, filled_map, x, y - 1);
+	return (is_surrounded);
+}
+
+static int	check_map_wall(t_game *game, char **layout, int rows)
+{
+	char	**filled_map;
+	int		i;
+	bool	is_surrounded;
+	int		x;
+	int		y;
+
+	filled_map = malloc((game->map.rows + 1) * sizeof(char *));
+	i = 0;
+	x = game->player.x;
+	y = game->player.y;
+	while (i < game->map.rows)
+	{
+		filled_map[i] = ft_strdup(layout[i]);
+		i++;
+	}
+	filled_map[i] = NULL;
+	filled_map[y][x] = '0';
+	is_surrounded = floodfill(game, filled_map, game->player.x, game->player.y);
+	free2(filled_map);
+	if (is_surrounded)
+		return (1);
 	return (0);
 }
 
@@ -53,6 +91,6 @@ void	check_map(t_game *game)
 		clean_exit(INIT_ERR, "Map is too large", game);
 	if (!check_map_obj(map.layout))
 		clean_exit(INIT_ERR, "Map must be composed of 01NSEW", game);
-	if (check_map_wall(map.layout, map.rows))
+	if (!check_map_wall(game, map.layout, map.rows))
 		clean_exit(INIT_ERR, "Map is not closed/surrounded by wall", game);
 }

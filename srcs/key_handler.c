@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 18:01:27 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/03 02:07:59 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/04 16:59:12 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,19 @@
 
 t_player	player_move(t_player player, int key)
 {
+	double	direction;
+
+	direction = player.direction;
 	if (key == K_W)
-	{
-		player.x += cos(player.direction) * MOVE_SPEED;
-		player.y += sin(player.direction) * MOVE_SPEED;
-	}
+		direction += 0;
 	if (key == K_S)
-	{
-		player.x -= cos(player.direction) * MOVE_SPEED;
-		player.y -= sin(player.direction) * MOVE_SPEED;
-	}
+		direction += PI;
 	if (key == K_A)
-	{
-		player.x += sin(player.direction) * MOVE_SPEED;
-		player.y -= cos(player.direction) * MOVE_SPEED;
-	}
+		direction += PI * 3 / 2;
 	if (key == K_D)
-	{
-		player.x -= sin(player.direction) * MOVE_SPEED;
-		player.y += cos(player.direction) * MOVE_SPEED;
-	}
+		direction += PI / 2;
+	player.x += cos(direction) * MOVE_SPEED;
+	player.y += sin(direction) * MOVE_SPEED;
 	return (player);
 }
 
@@ -45,18 +38,18 @@ t_player	limit_move(t_map map, t_player player)
 
 	x = player.x;
 	y = player.y;
-	if (map.layout[(int)y][(int)round(x)] == '1' && fabs(x - round(x)) < PLAYER_SIZE)
+	if (fabs(x - round(x)) < PLAYER_SIZE)
 	{
-		if (x > round(x))
+		if (x > round(x) && map.layout[(int)y][(int)round(x) - 1] == '1')
 			player.x = round(x) + PLAYER_SIZE;
-		else
+		else if (x < round(x) && map.layout[(int)y][(int)round(x)] == '1')
 			player.x = round(x) - PLAYER_SIZE;
 	}
-	if (map.layout[(int)round(y)][(int)x] == '1' && fabs(y - round(y)) < PLAYER_SIZE)
+	if (fabs(y - round(y)) < PLAYER_SIZE)
 	{
-		if (y > round(y))
+		if (y > round(y) && map.layout[(int)round(y) - 1][(int)x] == '1')
 			player.y = round(y) + PLAYER_SIZE;
-		else
+		else if (y < round(y) && map.layout[(int)round(y)][(int)x] == '1')
 			player.y = round(y) - PLAYER_SIZE;
 	}
 	return (player);
