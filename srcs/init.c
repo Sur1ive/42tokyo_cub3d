@@ -32,11 +32,13 @@ static int	map_elements_set(char *path, t_game *game)
 	if (fd == -1)
 			return (-1);
 	line = get_next_line(fd);
+	if (line[ft_strlen(line) -1] == '\n')
+		line[ft_strlen(line) - 1] = '\0';
 	while (line)
 	{
 		if (is_element(line))
 		{
-			split = ft_split(line, ' ');
+			split = ft_split(line, ' ');			
 			if (ft_strchr("NSEW", split[0][0]))
 				load_texture(game, split[1], (unsigned char*)split[0]);
 			else if (split[0][0] == 'F')
@@ -45,6 +47,8 @@ static int	map_elements_set(char *path, t_game *game)
 				map->ceiling_color = create_trgb(0,1,1,1);
 		}
 		line = get_next_line(fd);
+		if (line && line[ft_strlen(line) -1] == '\n')
+		line[ft_strlen(line) - 1] = '\0';
 	}
 	close(fd);
 	return (1);

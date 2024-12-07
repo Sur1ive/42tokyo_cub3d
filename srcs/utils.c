@@ -50,12 +50,14 @@ int	count_line(char *path)
 
 int	is_element(char	*line)
 {
-	if (!ft_strncmp(line, EID_WALL_E, 2) || !ft_strncmp(line, EID_WALL_N, 2)
-		|| !ft_strncmp(line, EID_WALL_S, 2) || !ft_strncmp(line, EID_WALL_W, 2))
+	if (!line)
+		return (-1);
+	if (!ft_strncmp(line, "EA", 2) || !ft_strncmp(line, "NO", 2)
+		|| !ft_strncmp(line, "SO", 2) || !ft_strncmp(line, "WE", 2))
 		return (1);
 	if (*line == 'F' || *line == 'C')
 		return (1);
-	return (1);
+	return (0);
 }
 
 double	limit_angle(double angle)
