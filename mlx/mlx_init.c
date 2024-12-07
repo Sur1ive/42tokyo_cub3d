@@ -11,8 +11,6 @@
 
 #include	"mlx_int.h"
 
-
-
 void	*mlx_init()
 {
 	t_xvar	*xvar;

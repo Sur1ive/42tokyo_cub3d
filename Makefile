@@ -7,13 +7,14 @@ SRCS	:= $(addprefix $(SRC_DIR), $(SRCS))
 OBJS	= $(SRCS:.c=.o)
 LIB		= ./libft/libft.a
 CC		= cc
-CFLAGS	= -Wall -Wextra -Werror -Imlx -Iincludes
+# CFLAGS	= -Wall -Wextra -Werror -Imlx -Iincludes
+CFLAGS	= -Imlx -Iincludes
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
 	make -C libft
-	$(CC) $(CFLAGS) $(OBJS) $(LIB) mlx/libmlx_Linux.a -lXext -lX11 -fsanitize=address -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIB) mlx/libmlx_Linux.a -lXext -lX11 -lm -fsanitize=address -o $(NAME)
 
 clean:
 	rm -rf $(OBJS)

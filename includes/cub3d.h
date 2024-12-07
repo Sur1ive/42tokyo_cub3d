@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
+/*   By: nakagawashinta <nakagawashinta@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:31:14 by yxu               #+#    #+#             */
-/*   Updated: 2024/11/16 19:37:13 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/04 00:05:59 by nakagawashi      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,27 +24,35 @@
 # include <X11/X.h>
 # include <X11/keysym.h>
 
+#define PI 3.141592653589793
+
 // exit_code
 # define MANUAL_QUIT 0
-# define ERR 1
+# define INIT_ERR 1
+# define RUN_ERR 2
 
 // game config
 # define MAX_MAP_ROWS 100
 # define MAX_MAP_COLS 100
 # define WIN_WIDTH 1920
 # define WIN_HEIGHT 1080
+# define GAME_FOV 2 * PI / 3
+# define GAME_FINENESS 1920
+# define PLAYER_SIZE 0.2
+# define MOVE_SPEED 0.1
 
 // element id
-# define EID_WALL_N "NO"
-# define EID_WALL_S "SO"
-# define EID_WALL_W "WE"
-# define EID_WALL_E "EA"
-# define EID_FLOOR "F"
-# define EID_CEILING "C"
+# define EID_WALL_N (unsigned char[]){'N', 'O'}
+# define EID_WALL_S (unsigned char[]){'S', 'O'}
+# define EID_WALL_W (unsigned char[]){'W', 'E'}
+# define EID_WALL_E (unsigned char[]){'E', 'A'}
+// # define EID_FLOOR (unsigned char[]){'F', '\0'}
+// # define EID_CEILING (unsigned char[]){'C', '\0'}
 
 typedef struct s_image
 {
 	void	*img;
+	char	*addr;
 	int		width;
 	int		height;
 	int		bits_per_pixel;
@@ -64,14 +72,16 @@ typedef struct s_map
 	char		**layout;
 	int			rows;
 	int			cols;
+	int			floor_color;
+	int			ceiling_color;
 	t_element	*elements;
 }	t_map;
 
 typedef struct s_player
 {
-	int		x;
-	int		y;
-	char	orientation;
+	double	x;
+	double	y;
+	double	direction;
 }	t_player;
 
 typedef struct s_game
@@ -81,6 +91,12 @@ typedef struct s_game
 	t_map		map;
 	t_player	player;
 }	t_game;
+
+typedef struct s_point {
+double	x;
+double	y;
+double	z;
+}	t_point;
 
 // init
 void	argv_checker(int argc, char **argv);
@@ -97,13 +113,21 @@ int		screenctl(t_game *game);
 int		close_win_handler(t_game *game);
 void	clean_exit(int exitcode, char *errmsg, t_game *game);
 
-// map tools
+// map utils
 void	free_map(t_game *game);
 void	print_layout(char **layout);
-t_image	*get_texture_with_id(t_element *elements, unsigned char id[2]);
+void	*get_texture_with_id(t_game *game, unsigned char id[2]);
+void	load_texture(t_game *game, char *filepath, unsigned char id[2]);
+void	mock_map_maker(t_game *game);
 
-// tools
+// image utils
+int		create_trgb(int t, int r, int g, int b);
+void	ft_mlx_pixel_put(t_image *image, int x, int y, int color);
+
+// utils
 int		count_line(char *path);
+int		is_element(char	*line);
 void	free2(char **p);
+double	limit_angle(double angle);
 
 #endif

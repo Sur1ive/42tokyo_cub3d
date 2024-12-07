@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 15:52:07 by yxu               #+#    #+#             */
-/*   Updated: 2024/11/16 19:37:20 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/01 14:48:38 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,25 @@ char	check_map_obj(char **layout)
 {
 	int		x;
 	int		y;
-	char	spawn_orientation;
+	char	spawn_direction;
 
 	x = 0;
-	spawn_orientation = '\0';
+	spawn_direction = '\0';
 	while (layout[x])
 	{
 		y = 0;
 		while (layout[x][y])
 		{
 			if (!ft_strchr("01NSEW", layout[x][y])
-				|| (ft_strchr("NSEW", layout[x][y]) && spawn_orientation))
+				|| (ft_strchr("NSEW", layout[x][y]) && spawn_direction))
 				return ('\0');
-			if (ft_strchr("NSEW", layout[x][y]) && !spawn_orientation)
-				spawn_orientation = layout[x][y];
+			if (ft_strchr("NSEW", layout[x][y]) && !spawn_direction)
+				spawn_direction = layout[x][y];
 			y++;
 		}
 		x++;
 	}
-	return (spawn_orientation);
+	return (spawn_direction);
 }
 
 static int	check_map_wall(char **layout, int rows)
@@ -50,9 +50,9 @@ void	check_map(t_game *game)
 
 	map = game->map;
 	if (map.rows > MAX_MAP_ROWS || map.cols > MAX_MAP_COLS)
-		clean_exit(ERR, "Map is too large", game);
+		clean_exit(INIT_ERR, "Map is too large", game);
 	if (!check_map_obj(map.layout))
-		clean_exit(ERR, "Map must be composed of 01NSEW", game);
+		clean_exit(INIT_ERR, "Map must be composed of 01NSEW", game);
 	if (check_map_wall(map.layout, map.rows))
-		clean_exit(ERR, "Map is not closed/surrounded by wall", game);
+		clean_exit(INIT_ERR, "Map is not closed/surrounded by wall", game);
 }
