@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 22:41:58 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/07 17:12:10 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/07 18:26:02 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,61 +53,78 @@ void	offset_from_gridline(double *x, double *y, double direction)
 	}
 }
 
-
-void	to_next_intersection(double *x, double *y, double direction)
+char	intersection_direction(double *x, double *y, double k, double direction)
 {
-	const double	k = tan(direction);
-	double	origin_x = *x;
-	double	origin_y = *y;
+	double	dx;
+	double	dy;
 
-	direction = limit_angle(direction);
-	offset_from_gridline(x, y, direction);
-
-	double	dx = floor(*x + 1) - *x;
-	double	dy = floor(*y + 1) - *y;
+	dx = floor(*x + 1) - *x;
+	dy = floor(*y + 1) - *y;
 
 if (direction > PI / 2 && direction < PI * 3 / 2)
 	dx = 1 - dx;
 // if (direction > PI)
 // 	dy = 1 - dy;
 
-
 	if (direction > PI / 2 && direction < PI * 3 / 2)
 	{
 		if (-k * dx - dy > 0)
-		{
-			*y = floor(*y + 1);
-			*x = origin_x + (*y - origin_y) / k;
-		}
+			return ('S');
 		else if (-k * dx - dy < -1)
-		{
-			*y = ceil(*y - 1);
-			*x = origin_x + (*y - origin_y) / k;
-		}
+			return ('N');
 		else
-		{
-			*x = ceil(*x - 1);
-			*y = origin_y + (*x - origin_x) * k;
-		}
+			return ('W');
 	}
 	else
 	{
 		if (k * dx - dy > 0)
-		{
-			*y = floor(*y + 1);
-			*x = origin_x + (*y - origin_y) / k;
-		}
+			return ('S');
 		else if (k * dx - dy < -1)
-		{
-			*y = ceil(*y - 1);
-			*x = origin_x + (*y - origin_y) / k;
-		}
+			return ('N');
 		else
-		{
-			*x = floor(*x + 1);
-			*y = origin_y + (*x - origin_x) * k;
-		}
+			return ('E');
 	}
+}
+
+void	compute_next_intersection(double *x, double *y, double k,
+	char next_intersection_direction)
+{
+	const double	origin_x = *x;
+	const double	origin_y = *y;
+
+	if (next_intersection_direction == 'N')
+	{
+		*y = ceil(*y - 1);
+		*x = origin_x + (*y - origin_y) / k;
+	}
+	if (next_intersection_direction == 'S')
+	{
+		*y = floor(*y + 1);
+		*x = origin_x + (*y - origin_y) / k;
+	}
+	if (next_intersection_direction == 'W')
+	{
+		*x = ceil(*x - 1);
+		*y = origin_y + (*x - origin_x) * k;
+	}
+	if (next_intersection_direction == 'E')
+	{
+		*x = floor(*x + 1);
+		*y = origin_y + (*x - origin_x) * k;
+	}
+}
+
+void	to_next_intersection(double *x, double *y, double direction)
+{
+	const double	k = tan(direction);
+	const double	origin_x = *x;
+	const double	origin_y = *y;
+	char			next_intersection_direction;
+
+	direction = limit_angle(direction);
+	offset_from_gridline(x, y, direction);
+	next_intersection_direction = intersection_direction(x, y, k, direction);
+	compute_next_intersection(x, y, k, next_intersection_direction);
 }
 
 double	calculate_ray_distance(t_map map, double origin_x, double origin_y, double direction)
@@ -123,6 +140,18 @@ double	calculate_ray_distance(t_map map, double origin_x, double origin_y, doubl
 	while (1)
 	{
 		to_next_intersection(&x, &y, direction);
+		// if (floor(x) == x && floor(y) == y)
+		// {
+		// 	x1 = x;
+		// 	y1 = y;
+		// 	if (x1 < 0 || y1 < 0 || map.layout[y1][x1] == '\0')
+		// 		return (INFINITY);
+		// 	if (map.layout[y1 - 1][x1] == '1' || map.layout[y1][x1 - 1] == '1'
+		// 	|| map.layout[y1][x1] == '1' || map.layout[y1 - 1][x1 - 1] == '1')
+		// 		return (sqrt(pow(x - origin_x, 2) + pow(y - origin_y, 2)));
+		// 	else
+		// 		return
+		// }
 		if (floor(x) == x)
 		{
 			y1 = floor(y);
@@ -139,7 +168,7 @@ double	calculate_ray_distance(t_map map, double origin_x, double origin_y, doubl
 			else
 				y1 = y - 1;
 		}
-		if (x1 < 0 || x1 >= map.cols || y1 < 0 || y1 >= map.rows)
+		if (x1 < 0 || y1 < 0 || map.layout[y1][x1] == '\0')
 			return (INFINITY);
 		if (map.layout[y1][x1] == '1')
 			return (sqrt(pow(x - origin_x, 2) + pow(y - origin_y, 2)));
