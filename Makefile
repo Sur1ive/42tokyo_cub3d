@@ -8,8 +8,7 @@ SRCS	:= $(addprefix $(SRC_DIR), $(SRCS))
 OBJS	= $(SRCS:.c=.o)
 LIB		= ./libft/libft.a
 CC		= cc
-# CFLAGS	= -Wall -Wextra -Werror -Imlx -Iincludes
-CFLAGS	= -Imlx -Iincludes
+CFLAGS	= -Wall -Wextra -Werror -Imlx -Iincludes
 
 all: $(NAME)
 

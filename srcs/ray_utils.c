@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yxu <yxu@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 22:41:58 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/07 18:53:14 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/08 16:11:18 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,14 @@ static void	offset_from_gridline(double *x, double *y, double direction)
 	}
 }
 
-static char	intersection_direction(double *x, double *y, double k,
+static char	compute_intersection_direction(double x, double y, double k,
 	double direction)
 {
 	double	dx;
 	double	dy;
 
-	dx = floor(*x + 1) - *x;
-	dy = floor(*y + 1) - *y;
+	dx = floor(x + 1) - x;
+	dy = floor(y + 1) - y;
 	if (direction > PI / 2 && direction < PI * 3 / 2)
 		dx = 1 - dx;
 	if (direction > PI)
@@ -61,42 +61,41 @@ static char	intersection_direction(double *x, double *y, double k,
 }
 
 static void	compute_next_intersection(double *x, double *y, double k,
-	char next_intersection_direction)
+	char intersection_direction)
 {
 	const double	origin_x = *x;
 	const double	origin_y = *y;
 
-	if (next_intersection_direction == 'N')
+	if (intersection_direction == 'N')
 	{
 		*y = ceil(*y - 1);
 		*x = origin_x + (*y - origin_y) / k;
 	}
-	if (next_intersection_direction == 'S')
+	if (intersection_direction == 'S')
 	{
 		*y = floor(*y + 1);
 		*x = origin_x + (*y - origin_y) / k;
 	}
-	if (next_intersection_direction == 'W')
+	if (intersection_direction == 'W')
 	{
 		*x = ceil(*x - 1);
 		*y = origin_y + (*x - origin_x) * k;
 	}
-	if (next_intersection_direction == 'E')
+	if (intersection_direction == 'E')
 	{
 		*x = floor(*x + 1);
 		*y = origin_y + (*x - origin_x) * k;
 	}
 }
 
-void	to_next_intersection(double *x, double *y, double direction)
+void	to_next_intersection(t_ray *ray)
 {
-	const double	k = tan(direction);
-	const double	origin_x = *x;
-	const double	origin_y = *y;
-	char			next_intersection_direction;
+	const double	k = tan(ray->direction);
 
-	direction = limit_angle(direction);
-	offset_from_gridline(x, y, direction);
-	next_intersection_direction = intersection_direction(x, y, k, direction);
-	compute_next_intersection(x, y, k, next_intersection_direction);
+	offset_from_gridline(&ray->tail.x, &ray->tail.y, ray->direction);
+	ray->intersection_direction
+		= compute_intersection_direction(
+			ray->tail.x, ray->tail.y, k, ray->direction);
+	compute_next_intersection(
+		&ray->tail.x, &ray->tail.y, k, ray->intersection_direction);
 }

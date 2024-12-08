@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   screenctl.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yxu <yxu@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 22:41:58 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/07 19:00:10 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/08 15:12:35 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,21 +50,20 @@ void	drawline(t_image *frame, t_point p1, t_point p2, int color)
 
 void	draw_wall(t_image *frame, t_game *game)
 {
-	double	*ray_distance_array;
+	t_ray	*ray_array;
 	int		i;
 	double	height;
 	t_point midpoint;
 	t_point p1;
 	t_point p2;
 
-	ray_distance_array = ray_casting(game->map, game->player);
+	ray_array = ray_casting(game->map, game->player);
+	if (ray_array == NULL)
+		clean_exit(RUN_ERR, "malloc error", game);
 	i = 0;
 	while (i < GAME_FINENESS)
 	{
-		if (ray_distance_array[i] == 0)
-			height = INFINITY;
-		else
-			height = 1.0 / (2 * ray_distance_array[i] * tan(GAME_FOV / 2)) * WIN_WIDTH / cos(atan((i - GAME_FINENESS / 2) * 2 * tan(GAME_FOV / 2) / GAME_FINENESS));
+		height = 1.0 / (2 * ray_array[i].distance * tan(GAME_FOV / 2)) * WIN_WIDTH / cos(atan((i - GAME_FINENESS / 2) * 2 * tan(GAME_FOV / 2) / GAME_FINENESS));
 		if (height >= WIN_HEIGHT)
 			height = WIN_HEIGHT;
 		midpoint.x = i;
@@ -73,10 +72,10 @@ void	draw_wall(t_image *frame, t_game *game)
 		p1.y = midpoint.y - height / 2;
 		p2.x = midpoint.x;
 		p2.y = midpoint.y + height / 2;
-		drawline(frame, p1, p2, create_trgb(0, 10 * ray_distance_array[i], 10 * ray_distance_array[i], 10 * ray_distance_array[i]));
+		drawline(frame, p1, p2, create_trgb(0, 10 * ray_array[i].distance, 10 * ray_array[i].distance, 10 * ray_array[i].distance));
 		i++;
 	}
-	free(ray_distance_array);
+	free(ray_array);
 }
 
 int	screenctl(t_game *game)

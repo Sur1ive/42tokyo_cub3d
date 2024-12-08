@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_handler.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yxu <yxu@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 18:01:27 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/07 20:04:55 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/08 16:50:34 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ t_player	player_move(t_player player, int key)
 		direction += PI * 3 / 2;
 	if (key == K_D)
 		direction += PI / 2;
-	player.x += cos(direction) * MOVE_SPEED;
-	player.y += sin(direction) * MOVE_SPEED;
+	player.location.x += cos(direction) * MOVE_SPEED;
+	player.location.y += sin(direction) * MOVE_SPEED;
 	return (player);
 }
 
@@ -36,21 +36,21 @@ t_player	limit_move(t_map map, t_player player)
 	double	x;
 	double	y;
 
-	x = player.x;
-	y = player.y;
+	x = player.location.x;
+	y = player.location.y;
 	if (fabs(x - round(x)) < PLAYER_SIZE)
 	{
 		if (x > round(x) && map.layout[(int)y][(int)round(x) - 1] == '1')
-			player.x = round(x) + PLAYER_SIZE;
+			player.location.x = round(x) + PLAYER_SIZE;
 		else if (x < round(x) && map.layout[(int)y][(int)round(x)] == '1')
-			player.x = round(x) - PLAYER_SIZE;
+			player.location.x = round(x) - PLAYER_SIZE;
 	}
 	if (fabs(y - round(y)) < PLAYER_SIZE)
 	{
 		if (y > round(y) && map.layout[(int)round(y) - 1][(int)x] == '1')
-			player.y = round(y) + PLAYER_SIZE;
+			player.location.y = round(y) + PLAYER_SIZE;
 		else if (y < round(y) && map.layout[(int)round(y)][(int)x] == '1')
-			player.y = round(y) - PLAYER_SIZE;
+			player.location.y = round(y) - PLAYER_SIZE;
 	}
 	return (player);
 }

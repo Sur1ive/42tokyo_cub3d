@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yxu <yxu@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:31:14 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/07 20:02:51 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/08 16:05:07 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,15 @@ typedef struct s_map
 	t_element	*elements;
 }	t_map;
 
-typedef struct s_player
+typedef struct s_point
 {
 	double	x;
 	double	y;
+}	t_point;
+
+typedef struct s_player
+{
+	t_point	location;
 	double	direction;
 }	t_player;
 
@@ -93,12 +98,14 @@ typedef struct s_game
 	t_player	player;
 }	t_game;
 
-typedef struct s_point
+typedef struct s_ray
 {
-	double	x;
-	double	y;
-	double	z;
-}	t_point;
+	t_point	origin;
+	t_point	tail;
+	double	direction;
+	double	distance;
+	char	intersection_direction;
+}	t_ray;
 
 // init
 void	argv_checker(int argc, char **argv);
@@ -127,8 +134,8 @@ int		create_trgb(int t, int r, int g, int b);
 void	ft_mlx_pixel_put(t_image *image, int x, int y, int color);
 
 // ray casting utils
-void	to_next_intersection(double *x, double *y, double direction);
-double	*ray_casting(t_map map, t_player player);
+void	to_next_intersection(t_ray *ray);
+t_ray	*ray_casting(t_map map, t_player player);
 
 // utils
 int		count_line(char *path);
