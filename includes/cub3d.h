@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:31:14 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/08 16:05:07 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/08 18:12:17 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@
 # define MAX_MAP_COLS 100
 # define WIN_WIDTH 1920
 # define WIN_HEIGHT 1080
-# define GAME_FOV 2 * PI / 4
-# define GAME_FINENESS 1920
+# define FOV 2 * PI / 4
+# define FINENESS 1920
 # define PLAYER_SIZE 0.2
 # define MOVE_SPEED 0.05
 # define CAMERA_TURN_SPEED 0.05
@@ -125,13 +125,14 @@ void	clean_exit(int exitcode, char *errmsg, t_game *game);
 // map utils
 void	free_map(t_game *game);
 void	print_layout(char **layout);
-void	*get_texture_with_id(t_game *game, unsigned char id[2]);
+t_image	*get_texture_with_id(t_game *game, unsigned char id[2]);
 void	load_texture(t_game *game, char *filepath, unsigned char id[2]);
 void	mock_map_maker(t_game *game);
 
 // image utils
 int		create_trgb(int t, int r, int g, int b);
 void	ft_mlx_pixel_put(t_image *image, int x, int y, int color);
+int		ft_mlx_get_image_pixel(t_image *image, double x_ratio, double y_ratio);
 
 // ray casting utils
 void	to_next_intersection(t_ray *ray);
@@ -141,5 +142,6 @@ t_ray	*ray_casting(t_map map, t_player player);
 int		count_line(char *path);
 void	free2(char **p);
 double	limit_angle(double angle);
+double	min(double x1, double x2);
 
 #endif

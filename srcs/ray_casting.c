@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 22:41:58 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/08 16:51:31 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/08 17:29:28 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,15 +84,16 @@ t_ray	*ray_casting(t_map map, t_player player)
 {
 	t_ray	*ray_array;
 	int		i;
+	double	angle;
 
-	ray_array = (t_ray *)malloc(sizeof(t_ray) * GAME_FINENESS);
+	ray_array = (t_ray *)malloc(sizeof(t_ray) * FINENESS);
 	if (ray_array == NULL)
 		return (NULL);
 	i = 0;
-	while (i < GAME_FINENESS)
+	while (i < FINENESS)
 	{
-		ray_array[i].direction = limit_angle(player.direction + atan(\
-			(i - GAME_FINENESS / 2) * 2 * tan(GAME_FOV / 2) / GAME_FINENESS));
+		angle = atan((i - FINENESS / 2) * 2 * tan(FOV / 2) / FINENESS);
+		ray_array[i].direction = limit_angle(player.direction + angle);
 		ray_array[i].origin = player.location;
 		calculate_ray_casting(map, &ray_array[i]);
 		i++;

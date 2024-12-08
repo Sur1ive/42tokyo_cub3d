@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 22:41:58 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/08 15:12:35 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/08 18:15:30 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,60 +33,72 @@ void	draw_background(t_image *frame, int floor_color, int ceiling_color)
 	}
 }
 
-void	drawline(t_image *frame, t_point p1, t_point p2, int color)
+void	draw_column(t_image *frame, t_point midpoint, t_game *game, t_ray ray, double height)
 {
-	int	fineness;
-	int	i;
+	int		y;
+	t_image	*texture;
+	double	x_ratio;
+	double	y_ratio;
 
-	fineness = sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2)) + 1;
-	i = 0;
-	while (i <= fineness)
+	y = midpoint.y - height / 2;
+	if (y < 0)
+		y = 0;
+	while (y <= min(WIN_HEIGHT, midpoint.y + height / 2))
 	{
-		ft_mlx_pixel_put(frame, round(p1.x + (p2.x - p1.x) / fineness * i),
-			round(p1.y + (p2.y - p1.y) / fineness * i), color);
-		i++;
+		if (ray.tail.x == floor(ray.tail.x))  // greedy
+			x_ratio = ray.tail.y - floor(ray.tail.y);
+		else
+			x_ratio = ray.tail.x - floor(ray.tail.x);
+		y_ratio = (y - (midpoint.y - height / 2)) / height;
+		if (ray.intersection_direction == 'N')
+			texture = get_texture_with_id(game, EID_WALL_N);
+		if (ray.intersection_direction == 'S')
+			texture = get_texture_with_id(game, EID_WALL_S);
+		if (ray.intersection_direction == 'W')
+			texture = get_texture_with_id(game, EID_WALL_W);
+		if (ray.intersection_direction == 'E')
+			texture = get_texture_with_id(game, EID_WALL_E);
+		ft_mlx_pixel_put(frame, midpoint.x, y, ft_mlx_get_image_pixel(texture, x_ratio, y_ratio));
+		y++;
 	}
 }
 
-void	draw_wall(t_image *frame, t_game *game)
+void	draw_wall(t_image *frame, t_game *game, t_ray *ray_array)
 {
-	t_ray	*ray_array;
 	int		i;
 	double	height;
-	t_point midpoint;
-	t_point p1;
-	t_point p2;
+	double	fish_eye_offset;
+	double	angle;
+	t_point	midpoint;
 
-	ray_array = ray_casting(game->map, game->player);
-	if (ray_array == NULL)
-		clean_exit(RUN_ERR, "malloc error", game);
 	i = 0;
-	while (i < GAME_FINENESS)
+	while (i < FINENESS)
 	{
-		height = 1.0 / (2 * ray_array[i].distance * tan(GAME_FOV / 2)) * WIN_WIDTH / cos(atan((i - GAME_FINENESS / 2) * 2 * tan(GAME_FOV / 2) / GAME_FINENESS));
-		if (height >= WIN_HEIGHT)
-			height = WIN_HEIGHT;
+		angle = atan((i - FINENESS / 2) * 2 * tan(FOV / 2) / FINENESS);
+		fish_eye_offset = 1 / cos(angle);
+		height = 1.0 / (2 * ray_array[i].distance * tan(FOV / 2)) * WIN_WIDTH
+			* fish_eye_offset;
 		midpoint.x = i;
 		midpoint.y = WIN_HEIGHT / 2;
-		p1.x = midpoint.x;
-		p1.y = midpoint.y - height / 2;
-		p2.x = midpoint.x;
-		p2.y = midpoint.y + height / 2;
-		drawline(frame, p1, p2, create_trgb(0, 10 * ray_array[i].distance, 10 * ray_array[i].distance, 10 * ray_array[i].distance));
+		draw_column(frame, midpoint, game, ray_array[i], height);
 		i++;
 	}
-	free(ray_array);
 }
 
 int	screenctl(t_game *game)
 {
 	t_image	frame;
+	t_ray	*ray_array;
 
 	frame.img = mlx_new_image(game->mlx, WIN_WIDTH, WIN_HEIGHT);
 	frame.addr = mlx_get_data_addr(frame.img, &frame.bits_per_pixel,
 			&frame.line_length, &frame.endian);
 	draw_background(&frame, game->map.floor_color, game->map.ceiling_color);
-	draw_wall(&frame, game);
+	ray_array = ray_casting(game->map, game->player);
+	if (ray_array == NULL)
+		clean_exit(RUN_ERR, "malloc error", game);
+	draw_wall(&frame, game, ray_array);
+	free(ray_array);
 	mlx_put_image_to_window(game->mlx, game->win, frame.img, 0, 0);
 	mlx_destroy_image(game->mlx, frame.img);
 	return (0);
