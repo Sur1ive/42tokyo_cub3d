@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
+/*   By: nakagawashinta <nakagawashinta@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:31:14 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/08 18:12:17 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/09 13:37:46 by nakagawashi      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <sys/time.h>
 # include <X11/X.h>
 # include <X11/keysym.h>
+# include <stdbool.h>
 
 # define PI 3.141592653589793
 
@@ -113,6 +114,7 @@ char	**read_map(char *path, t_game *game);
 char	check_map_obj(char **layout);
 void	check_map(t_game *game);
 void	init_game(char *map_path, t_game *game);
+void	init_player(t_game *game);
 
 // game
 int		key_handler(int key, t_game *game);
@@ -140,6 +142,7 @@ t_ray	*ray_casting(t_map map, t_player player);
 
 // utils
 int		count_line(char *path);
+int		is_element(char	*line);
 void	free2(char **p);
 double	limit_angle(double angle);
 double	min(double x1, double x2);
