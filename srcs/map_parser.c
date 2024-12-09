@@ -6,11 +6,30 @@
 /*   By: nakagawashinta <nakagawashinta@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 21:29:33 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/04 00:16:35 by nakagawashi      ###   ########.fr       */
+/*   Updated: 2024/12/09 12:05:38 by nakagawashi      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	fill_map(char **map, int cols)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (map[i])
+	{
+		j = ft_strlen(map[i]);
+		while (j < cols)
+		{
+			map[i][j] = '1';
+			j++;
+		}
+		map[i][j] = '\0';
+		i++;
+	}
+}
 
 static void	check_map_load(char **map, t_game *game)
 {
@@ -34,26 +53,7 @@ static void	check_map_load(char **map, t_game *game)
 	}
 }
 
-static void fill_map(char **map, int cols)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (map[i])
-	{
-		j = ft_strlen(map[i]);
-		while (j < cols)
-		{
-			map[i][j] = '1';
-			j++;
-		}
-		map[i][j] = '\0';
-		i++;
-	}
-}
-
-static int	get_max_cols(char **layout)
+int	get_max_cols(char **layout)
 {
 	int	cols;
 	int	i;
@@ -69,40 +69,52 @@ static int	get_max_cols(char **layout)
 	return (cols);
 }
 
-char	**read_map(char *path, t_game *game)
+static char	**load_map_layout(int fd, t_game *game)
 {
-	int		fd;
 	char	**map;
-	int		i;
 	char	*line;
+	int		i;
 
-	fd = open(path, O_RDONLY);
-	if (fd == -1)
-		clean_exit(2, "Map loading error\n", game);
 	map = (char **)malloc(sizeof(char *) * (game->map.rows + 1));
-	if (map == NULL)
-	{
-		close(fd);
-		clean_exit(2, "Map loading error\n", game);
-	}
+	if (!map)
+		return (NULL);
 	map[game->map.rows] = NULL;
-	i = 0;
-	line = NULL;
-	while (is_element(line) || line[0] == '\n')
+	line = get_next_line(fd);
+	while (line && (is_element(line) || line[0] == '\n'))
 	{
 		free(line);
 		line = get_next_line(fd);
 	}
+	i = 0;
 	while (i < game->map.rows)
 	{
 		map[i++] = line;
 		line = get_next_line(fd);
 	}
+	free(line);
+	return (map);
+}
+
+
+char	**read_map(char *path, t_game *game)
+{
+	int		fd;
+	char	**map;
+	int		i;
+
+	fd = open(path, O_RDONLY);
+	if (fd == -1)
+		clean_exit(2, "Map loading error\n", game);
+	map = load_map_layout(fd, game);
+	if (map == NULL)
+	{
+		close(fd);
+		clean_exit(2, "Map loading error\n", game);
+	}
 	close(fd);
 	check_map_load(map, game);
+	i = game->map.rows;
 	while (--i >= 0)
 		map[i][ft_strlen(map[i]) - 1] = '\0';
-	game->map.cols = get_max_cols(map);
-	fill_map(map, game->map.cols);
 	return (map);
 }

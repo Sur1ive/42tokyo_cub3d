@@ -12,6 +12,9 @@
 
 #include "cub3d.h"
 
+void	fill_map(char **map, int cols);
+int		get_max_cols(char **layout);
+
 static void	game_preset(t_game *game)
 {
 	game->mlx = NULL;
@@ -22,49 +25,62 @@ static void	game_preset(t_game *game)
 	game->map.ceiling_color = create_trgb(0, 102, 170, 255);
 }
 
-static int	map_elements_set(char *path, t_game *game)
+static void	get_floor_ceiling_colors(char **type, char **color, t_map *map)
+{
+	char	**rgb;
+	int		**n_rgb;
+	int		i;
+
+	rgb = ft_split(color, ',');
+	if (!rgb)
+		return ;
+	i = 0;
+	while (rgb[i])
+	{
+		n_rgb[i] = ft_atoi(rgb[i]);
+		i++;
+	}
+	if (!ft_strcmp(type, "F"))
+		map->floor_color = create_trgb(0, n_rgb[0], n_rgb[1], n_rgb[2]);
+	else
+		map->ceiling_color = create_trgb(0, n_rgb[0], n_rgb[1], n_rgb[2]);
+}
+
+static void	map_elements_set(char *path, t_game *game)
 {
 	int		fd;
 	char	**split;
 	char	*line;
-	t_map	*map;
 
-	map = &(game->map);
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
-			return (-1);
+		clean_exit(2, "Map loading error\n", game);
 	line = get_next_line(fd);
-	if (line[ft_strlen(line) -1] == '\n')
-		line[ft_strlen(line) - 1] = '\0';
 	while (line)
 	{
+		if (line[ft_strlen(line) - 1] == '\n')
+			line[ft_strlen(line) - 1] = '\0';
 		if (is_element(line))
 		{
-			split = ft_split(line, ' ');			
+			split = ft_split(line, ' ');
 			if (ft_strchr("NSEW", split[0][0]))
-				load_texture(game, split[1], (unsigned char*)split[0]);
-			else if (split[0][0] == 'F')
-				map->floor_color = create_trgb(0, 99, 62, 0);
+				load_texture(game, split[1], (unsigned char *)split[0]);
 			else
-				map->ceiling_color = create_trgb(0, 102, 170, 255);
+				get_floor_ceiling_colors(split[0], split[1], game->map);
 			free2(split);
 		}
 		free(line);
 		line = get_next_line(fd);
-		if (line && line[ft_strlen(line) -1] == '\n')
-		line[ft_strlen(line) - 1] = '\0';
 	}
-	free(line);
 	close(fd);
-	return (1);
 }
 
-static double get_player_direciotion(char direction)
+static double	get_player_direciotion(char direction)
 {
 	if (direction == 'N')
-		return (3/2 * PI);
+		return (3 / 2 * PI);
 	else if (direction == 'S')
-		return (1/2 * PI);
+		return (1 / 2 * PI);
 	else if (direction == 'E')
 		return (0);
 	else if (direction == 'W')
@@ -84,11 +100,11 @@ static void	init_player(t_game *game)
 		while (game->map.layout[j][i])
 		{
 			if (ft_strchr("NSEW", game->map.layout[j][i]))
-				break;
+				break ;
 			i++;
 		}
-		if (game->map.layout[j][i] &&  ft_strchr("NSEW", game->map.layout[j][i]))
-				break;
+		if (game->map.layout[j][i] && ft_strchr("NSEW", game->map.layout[j][i]))
+			break ;
 		j++;
 	}
 	game->player.x = i + 0.5;
@@ -98,11 +114,12 @@ static void	init_player(t_game *game)
 
 static void	init_map_and_player(char *map_path, t_game *game)
 {
-
 	map_elements_set(map_path, game);
 	game->map.rows = count_line(map_path);
 	game->map.layout = read_map(map_path, game);
+	game->map.cols = get_max_cols(game->map.layout);
 	init_player(game);
+	fill_map(game->map.layout, game->map.cols);
 	print_layout(game->map.layout);
 	check_map(game);
 }
