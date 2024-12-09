@@ -25,10 +25,10 @@ static void	game_preset(t_game *game)
 	game->map.ceiling_color = create_trgb(0, 102, 170, 255);
 }
 
-static void	get_floor_ceiling_colors(char **type, char **color, t_map *map)
+static void	get_floor_ceiling_colors(char *type, char *color, t_map *map)
 {
 	char	**rgb;
-	int		**n_rgb;
+	int		n_rgb[3];
 	int		i;
 
 	rgb = ft_split(color, ',');
@@ -66,7 +66,7 @@ static void	map_elements_set(char *path, t_game *game)
 			if (ft_strchr("NSEW", split[0][0]))
 				load_texture(game, split[1], (unsigned char *)split[0]);
 			else
-				get_floor_ceiling_colors(split[0], split[1], game->map);
+				get_floor_ceiling_colors(split[0], split[1], &(game->map));
 			free2(split);
 		}
 		free(line);
