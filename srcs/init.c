@@ -40,6 +40,7 @@ static void	get_floor_ceiling_colors(char *type, char *color, t_map *map)
 		n_rgb[i] = ft_atoi(rgb[i]);
 		i++;
 	}
+	free2(rgb);
 	if (!ft_strcmp(type, "F"))
 		map->floor_color = create_trgb(0, n_rgb[0], n_rgb[1], n_rgb[2]);
 	else
@@ -82,7 +83,7 @@ static void	init_map_and_player(char *map_path, t_game *game)
 	game->map.layout = read_map(map_path, game);
 	game->map.cols = get_max_cols(game->map.layout);
 	init_player(game);
-	fill_map(game->map.layout, game->map.cols);
+	// fill_map(game->map.layout, game->map.cols);
 	print_layout(game->map.layout);
 	check_map(game);
 }
