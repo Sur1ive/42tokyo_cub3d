@@ -6,7 +6,7 @@
 /*   By: nakagawashinta <nakagawashinta@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 21:29:33 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/09 12:05:38 by nakagawashi      ###   ########.fr       */
+/*   Updated: 2024/12/09 13:39:28 by nakagawashi      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ static void	check_map_load(char **map, t_game *game)
 
 int	get_max_cols(char **layout)
 {
-	int	cols;
-	int	i;
+	size_t	cols;
+	int		i;
 
 	i = 0;
 	cols = 0;
@@ -94,7 +94,6 @@ static char	**load_map_layout(int fd, t_game *game)
 	free(line);
 	return (map);
 }
-
 
 char	**read_map(char *path, t_game *game)
 {

@@ -6,7 +6,7 @@
 /*   By: nakagawashinta <nakagawashinta@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:31:14 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/04 16:15:52 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/09 13:37:46 by nakagawashi      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,11 @@
 # define MAX_MAP_COLS 100
 # define WIN_WIDTH 1920
 # define WIN_HEIGHT 1080
-# define GAME_FOV 2 * PI / 4
-# define GAME_FINENESS 1920
+# define FOV 2 * PI / 4
+# define FINENESS 1920
 # define PLAYER_SIZE 0.2
-# define MOVE_SPEED 0.1
+# define MOVE_SPEED 0.05
+# define CAMERA_TURN_SPEED 0.05
 
 // element id
 # define EID_WALL_N (unsigned char[]){'N', 'O'}
@@ -78,10 +79,15 @@ typedef struct s_map
 	t_element	*elements;
 }	t_map;
 
-typedef struct s_player
+typedef struct s_point
 {
 	double	x;
 	double	y;
+}	t_point;
+
+typedef struct s_player
+{
+	t_point	location;
 	double	direction;
 }	t_player;
 
@@ -93,12 +99,14 @@ typedef struct s_game
 	t_player	player;
 }	t_game;
 
-typedef struct s_point
+typedef struct s_ray
 {
-	double	x;
-	double	y;
-	double	z;
-}	t_point;
+	t_point	origin;
+	t_point	tail;
+	double	direction;
+	double	distance;
+	char	intersection_direction;
+}	t_ray;
 
 // init
 void	argv_checker(int argc, char **argv);
@@ -106,6 +114,7 @@ char	**read_map(char *path, t_game *game);
 char	check_map_obj(char **layout);
 void	check_map(t_game *game);
 void	init_game(char *map_path, t_game *game);
+void	init_player(t_game *game);
 
 // game
 int		key_handler(int key, t_game *game);
@@ -118,18 +127,24 @@ void	clean_exit(int exitcode, char *errmsg, t_game *game);
 // map utils
 void	free_map(t_game *game);
 void	print_layout(char **layout);
-void	*get_texture_with_id(t_game *game, unsigned char id[2]);
+t_image	*get_texture_with_id(t_game *game, unsigned char id[2]);
 void	load_texture(t_game *game, char *filepath, unsigned char id[2]);
 void	mock_map_maker(t_game *game);
 
 // image utils
 int		create_trgb(int t, int r, int g, int b);
 void	ft_mlx_pixel_put(t_image *image, int x, int y, int color);
+int		ft_mlx_get_image_pixel(t_image *image, double x_ratio, double y_ratio);
+
+// ray casting utils
+void	to_next_intersection(t_ray *ray);
+t_ray	*ray_casting(t_map map, t_player player);
 
 // utils
 int		count_line(char *path);
 int		is_element(char	*line);
 void	free2(char **p);
 double	limit_angle(double angle);
+double	min(double x1, double x2);
 
 #endif

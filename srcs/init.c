@@ -75,43 +75,6 @@ static void	map_elements_set(char *path, t_game *game)
 	close(fd);
 }
 
-static double	get_player_direciotion(char direction)
-{
-	if (direction == 'N')
-		return (3 / 2 * PI);
-	else if (direction == 'S')
-		return (1 / 2 * PI);
-	else if (direction == 'E')
-		return (0);
-	else if (direction == 'W')
-		return (PI);
-	return (-1);
-}
-
-static void	init_player(t_game *game)
-{
-	int		i;
-	int		j;
-
-	j = 0;
-	while (game->map.layout[j])
-	{
-		i = 0;
-		while (game->map.layout[j][i])
-		{
-			if (ft_strchr("NSEW", game->map.layout[j][i]))
-				break ;
-			i++;
-		}
-		if (game->map.layout[j][i] && ft_strchr("NSEW", game->map.layout[j][i]))
-			break ;
-		j++;
-	}
-	game->player.x = i + 0.5;
-	game->player.y = j + 0.5;
-	game->player.direction = get_player_direciotion(game->map.layout[j][i]);
-}
-
 static void	init_map_and_player(char *map_path, t_game *game)
 {
 	map_elements_set(map_path, game);

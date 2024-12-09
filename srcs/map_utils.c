@@ -6,13 +6,13 @@
 /*   By: nakagawashinta <nakagawashinta@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 17:04:34 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/04 00:13:44 by nakagawashi      ###   ########.fr       */
+/*   Updated: 2024/12/09 13:36:05 by nakagawashi      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	*get_texture_with_id(t_game *game, unsigned char id[2])
+t_image	*get_texture_with_id(t_game *game, unsigned char id[2])
 {
 	t_element	*elements;
 
@@ -20,7 +20,7 @@ void	*get_texture_with_id(t_game *game, unsigned char id[2])
 	while (elements)
 	{
 		if (elements->id[0] == id[0] && elements->id[1] == id[1])
-			return (elements->texture.img);
+			return (&elements->texture);
 		elements = elements->next;
 	}
 	return (NULL);
@@ -69,6 +69,9 @@ void	load_texture(t_game *game, char *filepath, unsigned char id[2])
 			filepath, &element->texture.width, &element->texture.height);
 	if (element->texture.img == NULL)
 		clean_exit(INIT_ERR, "error when loading textures", game);
+	element->texture.addr = mlx_get_data_addr(element->texture.img,
+			&element->texture.bits_per_pixel, &element->texture.line_length,
+			&element->texture.endian);
 	element->id[0] = id[0];
 	element->id[1] = id[1];
 	element->next = game->map.elements;

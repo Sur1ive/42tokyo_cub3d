@@ -6,7 +6,7 @@
 /*   By: nakagawashinta <nakagawashinta@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 23:17:52 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/04 00:13:06 by nakagawashi      ###   ########.fr       */
+/*   Updated: 2024/12/09 13:36:10 by nakagawashi      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,12 @@ double	limit_angle(double angle)
 	else if (angle > 2 * PI)
 		angle -= 2 * PI;
 	return (angle);
+}
+
+double	min(double x1, double x2)
+{
+	if (x1 > x2)
+		return (x2);
+	else
+		return (x1);
 }
