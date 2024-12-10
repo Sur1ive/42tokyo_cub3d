@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:31:14 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/08 18:12:17 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/10 22:14:53 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,14 @@ typedef struct s_ray
 	double	distance;
 	char	intersection_direction;
 }	t_ray;
+
+typedef struct s_column
+{
+	t_ray	*ray;
+	t_point	midpoint;
+	double	height;
+	t_image	*texture;
+}	t_column;
 
 // init
 void	argv_checker(int argc, char **argv);

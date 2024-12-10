@@ -6,13 +6,13 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 22:41:58 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/08 18:15:30 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/10 22:34:17 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	draw_background(t_image *frame, int floor_color, int ceiling_color)
+static void	draw_background(t_image *frame, int floor_color, int ceiling_color)
 {
 	int	x;
 	int	y;
@@ -33,54 +33,64 @@ void	draw_background(t_image *frame, int floor_color, int ceiling_color)
 	}
 }
 
-void	draw_column(t_image *frame, t_point midpoint, t_game *game, t_ray ray, double height)
+static t_column	create_column(int i, t_ray *ray, t_game *game)
 {
-	int		y;
-	t_image	*texture;
-	double	x_ratio;
-	double	y_ratio;
+	t_column	column;
+	double		fish_eye_offset;
+	double		angle;
 
-	y = midpoint.y - height / 2;
+	angle = atan((i - FINENESS / 2) * 2 * tan(FOV / 2) / FINENESS);
+	fish_eye_offset = 1 / cos(angle);
+	column.height = 1.0 / (2 * ray->distance * tan(FOV / 2)) * WIN_WIDTH
+		* fish_eye_offset;
+	column.midpoint.x = i;
+	column.midpoint.y = WIN_HEIGHT / 2;
+	if (ray->intersection_direction == 'N')
+		column.texture = get_texture_with_id(game, EID_WALL_N);
+	if (ray->intersection_direction == 'S')
+		column.texture = get_texture_with_id(game, EID_WALL_S);
+	if (ray->intersection_direction == 'W')
+		column.texture = get_texture_with_id(game, EID_WALL_W);
+	if (ray->intersection_direction == 'E')
+		column.texture = get_texture_with_id(game, EID_WALL_E);
+	column.ray = ray;
+	return (column);
+}
+
+static void	draw_column(t_image *frame, t_column *column)
+{
+	int				y;
+	double			x_ratio;
+	double			y_ratio;
+	const double	height = column->height;
+	const t_point	p = column->ray->tail;
+
+	y = column->midpoint.y - height / 2;
 	if (y < 0)
 		y = 0;
-	while (y <= min(WIN_HEIGHT, midpoint.y + height / 2))
+	if (p.x == floor(p.x))
+		x_ratio = p.y - floor(p.y);
+	else
+		x_ratio = p.x - floor(p.x);
+	while (y <= min(WIN_HEIGHT, column->midpoint.y + height / 2))
 	{
-		if (ray.tail.x == floor(ray.tail.x))  // greedy
-			x_ratio = ray.tail.y - floor(ray.tail.y);
-		else
-			x_ratio = ray.tail.x - floor(ray.tail.x);
-		y_ratio = (y - (midpoint.y - height / 2)) / height;
-		if (ray.intersection_direction == 'N')
-			texture = get_texture_with_id(game, EID_WALL_N);
-		if (ray.intersection_direction == 'S')
-			texture = get_texture_with_id(game, EID_WALL_S);
-		if (ray.intersection_direction == 'W')
-			texture = get_texture_with_id(game, EID_WALL_W);
-		if (ray.intersection_direction == 'E')
-			texture = get_texture_with_id(game, EID_WALL_E);
-		ft_mlx_pixel_put(frame, midpoint.x, y, ft_mlx_get_image_pixel(texture, x_ratio, y_ratio));
+		y_ratio = (y - (column->midpoint.y - height / 2)) / height;
+		ft_mlx_pixel_put(frame, column->midpoint.x, y,
+			ft_mlx_get_image_pixel(column->texture, x_ratio, y_ratio));
 		y++;
 	}
 }
 
-void	draw_wall(t_image *frame, t_game *game, t_ray *ray_array)
+static void	draw_wall(t_image *frame, t_game *game, t_ray *ray_array)
 {
-	int		i;
-	double	height;
-	double	fish_eye_offset;
-	double	angle;
-	t_point	midpoint;
+	int			i;
+	t_column	column;
 
 	i = 0;
 	while (i < FINENESS)
 	{
-		angle = atan((i - FINENESS / 2) * 2 * tan(FOV / 2) / FINENESS);
-		fish_eye_offset = 1 / cos(angle);
-		height = 1.0 / (2 * ray_array[i].distance * tan(FOV / 2)) * WIN_WIDTH
-			* fish_eye_offset;
-		midpoint.x = i;
-		midpoint.y = WIN_HEIGHT / 2;
-		draw_column(frame, midpoint, game, ray_array[i], height);
+		column = create_column(i, &ray_array[i], game);
+		draw_column(frame, &column);
 		i++;
 	}
 }
