@@ -6,20 +6,20 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 17:04:34 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/10 21:55:39 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/10 22:45:32 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-t_image	*get_texture_with_id(t_game *game, unsigned char id[2])
+t_image	*get_texture_with_id(t_game *game, unsigned char id)
 {
 	t_element	*elements;
 
 	elements = game->map.elements;
 	while (elements)
 	{
-		if (elements->id[0] == id[0] && elements->id[1] == id[1])
+		if (elements->id == id)
 			return (&elements->texture);
 		elements = elements->next;
 	}
@@ -58,7 +58,7 @@ void	free_map(t_game *game)
 	free2(game->map.layout);
 }
 
-void	load_texture(t_game *game, char *filepath, unsigned char id[2])
+void	load_texture(t_game *game, char *filepath, unsigned char id)
 {
 	t_element	*element;
 
@@ -72,8 +72,7 @@ void	load_texture(t_game *game, char *filepath, unsigned char id[2])
 	element->texture.addr = mlx_get_data_addr(element->texture.img,
 			&element->texture.bits_per_pixel, &element->texture.line_length,
 			&element->texture.endian);
-	element->id[0] = id[0];
-	element->id[1] = id[1];
+	element->id = id;
 	element->next = game->map.elements;
 	game->map.elements = element;
 }

@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:31:14 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/10 22:14:53 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/10 22:43:55 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <X11/keysym.h>
 
 # define PI 3.141592653589793
+# define PI_2 1.57079632679489661923	/* pi/2 */
 
 // exit_code
 # define MANUAL_QUIT 0
@@ -36,19 +37,17 @@
 # define MAX_MAP_COLS 100
 # define WIN_WIDTH 1920
 # define WIN_HEIGHT 1080
-# define FOV 2 * PI / 4
+# define FOV PI_2
 # define FINENESS 1920
 # define PLAYER_SIZE 0.2
 # define MOVE_SPEED 0.05
 # define CAMERA_TURN_SPEED 0.05
 
 // element id
-# define EID_WALL_N (unsigned char[]){'N', 'O'}
-# define EID_WALL_S (unsigned char[]){'S', 'O'}
-# define EID_WALL_W (unsigned char[]){'W', 'E'}
-# define EID_WALL_E (unsigned char[]){'E', 'A'}
-// # define EID_FLOOR (unsigned char[]){'F', '\0'}
-// # define EID_CEILING (unsigned char[]){'C', '\0'}
+# define EID_WALL_N 'N'
+# define EID_WALL_S 'S'
+# define EID_WALL_W 'W'
+# define EID_WALL_E 'E'
 
 typedef struct s_image
 {
@@ -63,7 +62,7 @@ typedef struct s_image
 
 typedef struct s_element
 {
-	unsigned char		id[2];
+	unsigned char		id;
 	t_image				texture;
 	struct s_element	*next;
 }	t_element;
@@ -133,8 +132,8 @@ void	clean_exit(int exitcode, char *errmsg, t_game *game);
 // map utils
 void	free_map(t_game *game);
 void	print_layout(char **layout);
-t_image	*get_texture_with_id(t_game *game, unsigned char id[2]);
-void	load_texture(t_game *game, char *filepath, unsigned char id[2]);
+t_image	*get_texture_with_id(t_game *game, unsigned char id);
+void	load_texture(t_game *game, char *filepath, unsigned char id);
 void	mock_map_maker(t_game *game);
 
 // image utils

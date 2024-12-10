@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 22:41:58 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/10 22:34:17 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/10 22:41:38 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,7 @@ static t_column	create_column(int i, t_ray *ray, t_game *game)
 		* fish_eye_offset;
 	column.midpoint.x = i;
 	column.midpoint.y = WIN_HEIGHT / 2;
-	if (ray->intersection_direction == 'N')
-		column.texture = get_texture_with_id(game, EID_WALL_N);
-	if (ray->intersection_direction == 'S')
-		column.texture = get_texture_with_id(game, EID_WALL_S);
-	if (ray->intersection_direction == 'W')
-		column.texture = get_texture_with_id(game, EID_WALL_W);
-	if (ray->intersection_direction == 'E')
-		column.texture = get_texture_with_id(game, EID_WALL_E);
+	column.texture = get_texture_with_id(game, ray->intersection_direction);
 	column.ray = ray;
 	return (column);
 }
