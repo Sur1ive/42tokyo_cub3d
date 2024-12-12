@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   map_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
+/*   By: nakagawashinta <nakagawashinta@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 17:04:34 by yxu               #+#    #+#             */
 /*   Updated: 2024/12/10 22:45:32 by yxu              ###   ########.fr       */
@@ -77,23 +77,23 @@ void	load_texture(t_game *game, char *filepath, unsigned char id)
 	game->map.elements = element;
 }
 
-void	mock_map_maker(t_game *game)
-{
-	game->map.layout = (char **)malloc(5 * sizeof(char *));
-	game->map.layout[4] = NULL;
-	game->map.layout[0] = ft_strdup("11111111");
-	game->map.layout[1] = ft_strdup("1N000001");
-	game->map.layout[2] = ft_strdup("10010011");
-	game->map.layout[3] = ft_strdup("11111111");
-	game->map.rows = 4;
-	game->map.cols = 8;
-	load_texture(game, "textures/Textures-1.xpm", EID_WALL_N);
-	load_texture(game, "textures/Textures-2.xpm", EID_WALL_S);
-	load_texture(game, "textures/Textures-3.xpm", EID_WALL_W);
-	load_texture(game, "textures/Textures-4.xpm", EID_WALL_E);
-	game->map.ceiling_color = create_trgb(0, 102, 170, 255);
-	game->map.floor_color = create_trgb(0, 99, 62, 0);
-	game->player.direction = 0;
-	game->player.location.x = 1.5;
-	game->player.location.y = 1.5;
-}
+// void	mock_map_maker(t_game *game)
+// {
+// 	game->map.layout = (char **)malloc(5 * sizeof(char *));
+// 	game->map.layout[4] = NULL;
+// 	game->map.layout[0] = ft_strdup("11111111");
+// 	game->map.layout[1] = ft_strdup("1N000001");
+// 	game->map.layout[2] = ft_strdup("10010011");
+// 	game->map.layout[3] = ft_strdup("11111111");
+// 	game->map.rows = 4;
+// 	game->map.cols = 8;
+// 	load_texture(game, "textures/Textures-1.xpm", EID_WALL_N);
+// 	load_texture(game, "textures/Textures-2.xpm", EID_WALL_S);
+// 	load_texture(game, "textures/Textures-3.xpm", EID_WALL_W);
+// 	load_texture(game, "textures/Textures-4.xpm", EID_WALL_E);
+// 	game->map.ceiling_color = create_trgb(0, 102, 170, 255);
+// 	game->map.floor_color = create_trgb(0, 99, 62, 0);
+// 	game->player.direction = 0;
+//	game->player.location.x = 1.5;
+//	game->player.location.y = 1.5;
+// }

@@ -1,16 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/19 16:49:56 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/01 13:55:04 by yxu              ###   ########.fr       */
+/*   init.c                                             ::      ::    ::   */
+/*                                                    : :         :     */
+/*   By: nakagawashinta <nakagawashinta@student.    #  :       #        */
+/*                                                #####   #           */
+/*   Created: 2023/12/19 16:49:56 by yxu               ##    ##             */
+/*   Updated: 2024/12/03 23:46:10 by nakagawashi      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	fill_map(char **map, int cols);
+int		get_max_cols(char **layout);
 
 static void	game_preset(t_game *game)
 {
@@ -18,15 +21,71 @@ static void	game_preset(t_game *game)
 	game->win = NULL;
 	game->map.layout = NULL;
 	game->map.elements = NULL;
+	game->map.floor_color = create_trgb(0, 99, 62, 0);
+	game->map.ceiling_color = create_trgb(0, 102, 170, 255);
+}
+
+static void	get_floor_ceiling_colors(char *type, char *color, t_map *map)
+{
+	char	**rgb;
+	int		n_rgb[3];
+	int		i;
+
+	rgb = ft_split(color, ',');
+	if (!rgb)
+		return ;
+	i = 0;
+	while (rgb[i])
+	{
+		n_rgb[i] = ft_atoi(rgb[i]);
+		i++;
+	}
+	free2(rgb);
+	if (!ft_strcmp(type, "F"))
+		map->floor_color = create_trgb(0, n_rgb[0], n_rgb[1], n_rgb[2]);
+	else
+		map->ceiling_color = create_trgb(0, n_rgb[0], n_rgb[1], n_rgb[2]);
+}
+
+static void	map_elements_set(char *path, t_game *game)
+{
+	int		fd;
+	char	**split;
+	char	*line;
+
+	fd = open(path, O_RDONLY);
+	if (fd == -1)
+		clean_exit(2, "Map loading error\n", game);
+	line = get_next_line(fd);
+	while (line)
+	{
+		if (line[ft_strlen(line) - 1] == '\n')
+			line[ft_strlen(line) - 1] = '\0';
+		if (is_element(line))
+		{
+			split = ft_split(line, ' ');
+			if (ft_strchr("NSEW", split[0][0]))
+				load_texture(game, split[1], (unsigned char *)split[0]);
+			else
+				get_floor_ceiling_colors(split[0], split[1], &(game->map));
+			free2(split);
+		}
+		free(line);
+		line = get_next_line(fd);
+	}
+	close(fd);
 }
 
 static void	init_map_and_player(char *map_path, t_game *game)
 {
-	// game->map.rows = count_line(map_path);
-	// game->map.layout = read_map(map_path, game);
-	// check_map(game);
-	(void)map_path;
-	mock_map_maker(game);
+	map_elements_set(map_path, game);
+	game->map.rows = count_line(map_path);
+	game->map.layout = read_map(map_path, game);
+	game->map.cols = get_max_cols(game->map.layout);
+	init_player(game);
+	// fill_map(game->map.layout, game->map.cols);
+	print_layout(game->map.layout);
+	check_map(game);
 }
 
 void	init_game(char *map_path, t_game *game)

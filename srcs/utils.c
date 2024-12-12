@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
+/*   By: nakagawashinta <nakagawashinta@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 23:17:52 by yxu               #+#    #+#             */
 /*   Updated: 2024/12/10 21:54:44 by yxu              ###   ########.fr       */
@@ -36,6 +36,11 @@ int	count_line(char *path)
 		return (-1);
 	nb = 0;
 	line = get_next_line(fd);
+	while (is_element(line) || line[0] == '\n')
+	{
+		free(line);
+		line = get_next_line(fd);
+	}
 	while (line)
 	{
 		nb++;
@@ -44,6 +49,18 @@ int	count_line(char *path)
 	}
 	close(fd);
 	return (nb);
+}
+
+int	is_element(char	*line)
+{
+	if (!line)
+		return (-1);
+	if (!ft_strncmp(line, "EA", 2) || !ft_strncmp(line, "NO", 2)
+		|| !ft_strncmp(line, "SO", 2) || !ft_strncmp(line, "WE", 2))
+		return (1);
+	if (*line == 'F' || *line == 'C')
+		return (1);
+	return (0);
 }
 
 double	limit_angle(double angle)
