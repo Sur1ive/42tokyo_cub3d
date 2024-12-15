@@ -65,7 +65,7 @@ static void	map_elements_set(char *path, t_game *game)
 		{
 			split = ft_split(line, ' ');
 			if (ft_strchr("NSEW", split[0][0]))
-				load_texture(game, split[1], (unsigned char *)split[0]);
+				load_texture(game, split[1], split[0][0]);
 			else
 				get_floor_ceiling_colors(split[0], split[1], &(game->map));
 			free2(split);
