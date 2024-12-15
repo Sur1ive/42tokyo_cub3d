@@ -27,7 +27,10 @@ char	check_map_obj(char **layout)
 		{
 			if (!ft_strchr("01NSEW \n", layout[x][y])
 				|| (ft_strchr("NSEW", layout[x][y]) && spawn_direction))
-				return ('\0');
+				{
+					printf("layout:%c\n",layout[x][y]);
+					return ('\0');
+				}
 			if (ft_strchr("NSEW", layout[x][y]) && !spawn_direction)
 				spawn_direction = layout[x][y];
 			y++;

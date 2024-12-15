@@ -30,7 +30,7 @@ void	fill_map(char **map, int cols, t_game *game)
 		map[i] = tmp;
 		while (j < cols)
 		{
-			map[i][j] = ' ';
+			map[i][j] = '0';
 			j++;
 		}
 		map[i][j] = '\0';

@@ -14,6 +14,7 @@
 
 void	fill_map(char **map, int cols, t_game *game);
 int		get_max_cols(char **layout);
+void	change_space_to_zero(t_map *map);
 
 static void	game_preset(t_game *game)
 {
@@ -83,8 +84,9 @@ static void	init_map_and_player(char *map_path, t_game *game)
 	game->map.layout = read_map(map_path, game);
 	game->map.cols = get_max_cols(game->map.layout);
 	init_player(game);
-	check_map(game);
 	fill_map(game->map.layout, game->map.cols, game);
+	change_space_to_zero(&game->map);
+	check_map(game);
 	print_layout(game->map.layout);
 }
 
