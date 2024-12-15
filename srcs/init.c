@@ -12,7 +12,7 @@
 
 #include "cub3d.h"
 
-void	fill_map(char **map, int cols);
+void	fill_map(char **map, int cols, t_game *game);
 int		get_max_cols(char **layout);
 
 static void	game_preset(t_game *game)
@@ -21,8 +21,8 @@ static void	game_preset(t_game *game)
 	game->win = NULL;
 	game->map.layout = NULL;
 	game->map.elements = NULL;
-	game->map.floor_color = create_trgb(0, 99, 62, 0);
-	game->map.ceiling_color = create_trgb(0, 102, 170, 255);
+	game->map.floor_color = 0;
+	game->map.ceiling_color = 0;
 }
 
 static void	get_floor_ceiling_colors(char *type, char *color, t_map *map)
@@ -83,9 +83,9 @@ static void	init_map_and_player(char *map_path, t_game *game)
 	game->map.layout = read_map(map_path, game);
 	game->map.cols = get_max_cols(game->map.layout);
 	init_player(game);
-	// fill_map(game->map.layout, game->map.cols);
-	print_layout(game->map.layout);
 	check_map(game);
+	fill_map(game->map.layout, game->map.cols, game);
+	print_layout(game->map.layout);
 }
 
 void	init_game(char *map_path, t_game *game)
@@ -94,6 +94,12 @@ void	init_game(char *map_path, t_game *game)
 	game->mlx = mlx_init();
 	if (game->mlx == NULL)
 		clean_exit(INIT_ERR, "MLX initialization failed", game);
+	load_texture(game, "textures/Textures-1.xpm", EID_WALL_N);
+	load_texture(game, "textures/Textures-2.xpm", EID_WALL_S);
+	load_texture(game, "textures/Textures-3.xpm", EID_WALL_W);
+	load_texture(game, "textures/Textures-4.xpm", EID_WALL_E);
+	game->map.floor_color = create_trgb(0, 99, 62, 0);
+	game->map.ceiling_color = create_trgb(0, 137, 189, 222);
 	game->win = mlx_new_window(game->mlx, WIN_WIDTH, WIN_HEIGHT, "cub3d");
 	if (game->win == NULL)
 		clean_exit(INIT_ERR, "MLX initialization failed", game);
