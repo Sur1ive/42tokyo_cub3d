@@ -14,7 +14,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	make -C libft
-	$(CC) $(CFLAGS) $(OBJS) $(LIB) mlx/libmlx_Linux.a -lXext -lX11 -lm -fsanitize=address -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LIB) mlx/libmlx_Linux.a -lXext -lX11 -lm -o $(NAME)
 
 clean:
 	rm -rf $(OBJS)
