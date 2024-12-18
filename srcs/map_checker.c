@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_checker.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nakagawashinta <nakagawashinta@student.    +#+  +:+       +#+        */
+/*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 15:52:07 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/09 13:39:10 by nakagawashi      ###   ########.fr       */
+/*   Updated: 2024/12/19 00:28:51 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,7 @@ char	check_map_obj(char **layout)
 		{
 			if (!ft_strchr("01NSEW \n", layout[x][y])
 				|| (ft_strchr("NSEW", layout[x][y]) && spawn_direction))
-				{
-					printf("layout:%c\n",layout[x][y]);
-					return ('\0');
-				}
+				return ('\0');
 			if (ft_strchr("NSEW", layout[x][y]) && !spawn_direction)
 				spawn_direction = layout[x][y];
 			y++;
