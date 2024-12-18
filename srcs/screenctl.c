@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 22:41:58 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/10 22:41:38 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/18 23:53:09 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void	draw_column(t_image *frame, t_column *column)
 		x_ratio = p.x - floor(p.x);
 	while (y <= min(WIN_HEIGHT, column->midpoint.y + height / 2))
 	{
-		y_ratio = (y - (column->midpoint.y - height / 2)) / height;
+		y_ratio = (y - floor(column->midpoint.y - height / 2)) / height;
 		ft_mlx_pixel_put(frame, column->midpoint.x, y,
 			ft_mlx_get_image_pixel(column->texture, x_ratio, y_ratio));
 		y++;
