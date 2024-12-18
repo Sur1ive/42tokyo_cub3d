@@ -12,23 +12,31 @@
 
 #include "cub3d.h"
 
-void	fill_map(char **map, int cols)
+void	fill_map(char **map, int cols, t_game *game)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	char	*tmp;
 
 	i = 0;
 	while (map[i])
 	{
+		tmp = malloc(sizeof(char) * (game->map.cols + 1));
+		if (!tmp)
+			clean_exit(2, "Map loading error\n", game);
 		j = ft_strlen(map[i]);
+		ft_strlcpy(tmp, map[i], j + 1);
+		free(map[i]);
+		map[i] = tmp;
 		while (j < cols)
 		{
-			map[i][j] = '1';
+			map[i][j] = '0';
 			j++;
 		}
 		map[i][j] = '\0';
 		i++;
 	}
+	map[i] = NULL;
 }
 
 static void	check_map_load(char **map, t_game *game)
