@@ -6,15 +6,18 @@ SRCS	= main.c init.c init_player.c exit.c argv_checker.c utils.c key_handler.c\
 		ray_utils.c ray_casting.c
 SRCS	:= $(addprefix $(SRC_DIR), $(SRCS))
 OBJS	= $(SRCS:.c=.o)
-LIB		= ./libft/libft.a
+LIB		= ./libft/libft.a mlx/libmlx_Linux.a
 CC		= cc
 CFLAGS	= -Wall -Wextra -Werror -Imlx -Iincludes
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
+$(LIB):
 	make -C libft
-	$(CC) $(CFLAGS) $(OBJS) $(LIB) mlx/libmlx_Linux.a -lXext -lX11 -lm -o $(NAME)
+	make -C mlx
+
+$(NAME): $(LIB) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) $(LIB) -lXext -lX11 -lm -o $(NAME)
 
 clean:
 	rm -rf $(OBJS)
@@ -23,6 +26,7 @@ clean:
 fclean: clean
 	rm -rf $(NAME)
 	make fclean -C libft
+	make clean -C mlx
 
 re: fclean all
 
