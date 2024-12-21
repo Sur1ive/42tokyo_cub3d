@@ -26,7 +26,20 @@ static void	game_preset(t_game *game)
 	game->map.ceiling_color = 0;
 }
 
-static void	get_floor_ceiling_colors(char *type, char *color, t_map *map)
+int	is_number(const char *str)
+{
+	if (!str || *str == '\0')
+		return (0);
+	while (*str)
+	{
+		if (!ft_isdigit(*str))
+			return (0);
+		str++;
+	}
+	return (1);
+}
+
+static int	get_floor_ceiling_colors(char *type, char *color, t_game *game)
 {
 	char	**rgb;
 	int		n_rgb[3];
@@ -34,18 +47,49 @@ static void	get_floor_ceiling_colors(char *type, char *color, t_map *map)
 
 	rgb = ft_split(color, ',');
 	if (!rgb)
-		return ;
+		return (0);
 	i = 0;
 	while (rgb[i])
 	{
-		n_rgb[i] = ft_atoi(rgb[i]);
+		if (!is_number(rgb[i]))
+			return (0);
 		i++;
+	}
+	if (i != 3)
+		return (0);
+	i--;
+	while (i >= 0)
+	{
+		n_rgb[i] = ft_atoi(rgb[i]);
+		if (n_rgb[i] < 0 || n_rgb[i] > 255)
+			return (0);
+		i--;
 	}
 	free2(rgb);
 	if (!ft_strcmp(type, "F"))
-		map->floor_color = create_trgb(0, n_rgb[0], n_rgb[1], n_rgb[2]);
+		game->map.floor_color = create_trgb(0, n_rgb[0], n_rgb[1], n_rgb[2]);
 	else
-		map->ceiling_color = create_trgb(0, n_rgb[0], n_rgb[1], n_rgb[2]);
+		game->map.ceiling_color = create_trgb(0, n_rgb[0], n_rgb[1], n_rgb[2]);
+	return (1);
+}
+
+static int	handle_element(char **split, t_game *game)
+{
+	int i;
+
+	i = 0;
+	while (split[i])
+		i++;
+	if (i != 2)
+		return (0);
+	if (ft_strchr("NSEW", split[0][0]))
+		load_texture(game, split[1], split[0][0]);
+	else
+	{
+		if (!get_floor_ceiling_colors(split[0], split[1], game))
+			return (0);
+	}
+	return (1);
 }
 
 static void	map_elements_set(char *path, t_game *game)
@@ -65,10 +109,13 @@ static void	map_elements_set(char *path, t_game *game)
 		if (is_element(line))
 		{
 			split = ft_split(line, ' ');
-			if (ft_strchr("NSEW", split[0][0]))
-				load_texture(game, split[1], split[0][0]);
-			else
-				get_floor_ceiling_colors(split[0], split[1], &(game->map));
+			if (!handle_element(split, game))
+			{
+				free2(split);
+				free(line);
+				close(fd);
+				clean_exit(2, "Invalid element\n" , game);
+			}
 			free2(split);
 		}
 		free(line);
@@ -77,8 +124,41 @@ static void	map_elements_set(char *path, t_game *game)
 	close(fd);
 }
 
+void	check_elements(char *map_path, t_game *game)
+{
+	int		fd, i;
+	const char	*elements[6] = {""};
+	char	*line;
+
+	fd = open(map_path, O_RDONLY);
+	if (fd == -1)
+		clean_exit(2, "Map loading error\n", game);
+	line = get_next_line(fd);
+	i = 0;
+	while (line && i < 6)
+	{
+		if (*line != '\n' && *line != '\0')
+		{
+			if (ft_strncmp(elements[i], line, ft_strlen(elements[i])))
+			{
+				free(line);
+				close(fd);
+				clean_exit(2, "Missing or invalid element", game);
+			}
+			i++;
+		}
+		free(line);
+		line = get_next_line(fd);
+	}
+	close(fd);
+	if (i < 6)
+		clean_exit(2, "Missing elements in map file", game);
+}
+
+
 static void	init_map_and_player(char *map_path, t_game *game)
 {
+	check_elements(map_path, game);
 	map_elements_set(map_path, game);
 	game->map.rows = count_line(map_path);
 	game->map.layout = read_map(map_path, game);
@@ -96,12 +176,6 @@ void	init_game(char *map_path, t_game *game)
 	game->mlx = mlx_init();
 	if (game->mlx == NULL)
 		clean_exit(INIT_ERR, "MLX initialization failed", game);
-	load_texture(game, "textures/Textures-1.xpm", EID_WALL_N);
-	load_texture(game, "textures/Textures-2.xpm", EID_WALL_S);
-	load_texture(game, "textures/Textures-3.xpm", EID_WALL_W);
-	load_texture(game, "textures/Textures-4.xpm", EID_WALL_E);
-	game->map.floor_color = create_trgb(0, 99, 62, 0);
-	game->map.ceiling_color = create_trgb(0, 137, 189, 222);
 	game->win = mlx_new_window(game->mlx, WIN_WIDTH, WIN_HEIGHT, "cub3d");
 	if (game->win == NULL)
 		clean_exit(INIT_ERR, "MLX initialization failed", game);
