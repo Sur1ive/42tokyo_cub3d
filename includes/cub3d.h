@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nakagawashinta <nakagawashinta@student.    +#+  +:+       +#+        */
+/*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:31:14 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/10 22:43:55 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/24 23:47:14 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@
 # define FOV PI_2
 # define FINENESS 1920
 # define PLAYER_SIZE 0.2
-# define MOVE_SPEED 0.05
+# define MOVE_SPEED 0.05 // must smaller than PLAYER_SIZE
 # define CAMERA_TURN_SPEED 0.05
 
 // element id
