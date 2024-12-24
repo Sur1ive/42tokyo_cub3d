@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_player.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nakagawashinta <nakagawashinta@student.    +#+  +:+       +#+        */
+/*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 12:16:45 by nakagawashi       #+#    #+#             */
-/*   Updated: 2024/12/09 13:34:53 by nakagawashi      ###   ########.fr       */
+/*   Updated: 2024/12/24 23:25:00 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 static double	get_player_dir(char direction)
 {
 	if (direction == 'N')
-		return (3 / 2 * PI);
+		return (PI * 3 / 2);
 	else if (direction == 'S')
-		return (1 / 2 * PI);
+		return (PI * 1 / 2);
 	else if (direction == 'E')
 		return (0);
 	else if (direction == 'W')
