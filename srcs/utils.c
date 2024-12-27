@@ -6,7 +6,7 @@
 /*   By: nakagawashinta <nakagawashinta@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 23:17:52 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/10 21:54:44 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/28 02:07:43 by nakagawashi      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,17 @@ int	count_line(char *path)
 	return (nb);
 }
 
-int	is_element(char	*line)
+int	is_number(const char *str)
 {
-	if (!line)
-		return (-1);
-	if (!ft_strncmp(line, "EA", 2) || !ft_strncmp(line, "NO", 2)
-		|| !ft_strncmp(line, "SO", 2) || !ft_strncmp(line, "WE", 2))
-		return (1);
-	if (*line == 'F' || *line == 'C')
-		return (1);
-	return (0);
+	if (!str || *str == '\0')
+		return (0);
+	while (*str)
+	{
+		if (!ft_isdigit(*str))
+			return (0);
+		str++;
+	}
+	return (1);
 }
 
 double	limit_angle(double angle)

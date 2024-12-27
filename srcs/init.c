@@ -15,6 +15,8 @@
 void	fill_map(char **map, int cols, t_game *game);
 int		get_max_cols(char **layout);
 void	change_space_to_zero(t_map *map);
+void	check_elements(char *map_path, t_game *game);
+void	map_elements_set(char *path, t_game *game);
 
 static void	game_preset(t_game *game)
 {
@@ -26,139 +28,29 @@ static void	game_preset(t_game *game)
 	game->map.ceiling_color = 0;
 }
 
-int	is_number(const char *str)
+int	is_element(char *line)
 {
-	if (!str || *str == '\0')
-		return (0);
-	while (*str)
-	{
-		if (!ft_isdigit(*str))
-			return (0);
-		str++;
-	}
-	return (1);
+	if (!line)
+		return (-1);
+	if (!ft_strncmp(line, "EA ", 3))
+		return (1);
+	if (!ft_strncmp(line, "NO ", 3))
+		return (2);
+	if (!ft_strncmp(line, "SO ", 3))
+		return (3);
+	if (!ft_strncmp(line, "WE ", 3))
+		return (4);
+	if (!ft_strncmp(line, "F ", 2))
+		return (5);
+	if (!ft_strncmp(line, "C ", 2))
+		return (6);
+	return (0);
 }
-
-static int	get_floor_ceiling_colors(char *type, char *color, t_game *game)
-{
-	char	**rgb;
-	int		n_rgb[3];
-	int		i;
-
-	rgb = ft_split(color, ',');
-	if (!rgb)
-		return (0);
-	i = 0;
-	while (rgb[i])
-	{
-		if (!is_number(rgb[i]))
-			return (0);
-		i++;
-	}
-	if (i != 3)
-		return (0);
-	i--;
-	while (i >= 0)
-	{
-		n_rgb[i] = ft_atoi(rgb[i]);
-		if (n_rgb[i] < 0 || n_rgb[i] > 255)
-			return (0);
-		i--;
-	}
-	free2(rgb);
-	if (!ft_strcmp(type, "F"))
-		game->map.floor_color = create_trgb(0, n_rgb[0], n_rgb[1], n_rgb[2]);
-	else
-		game->map.ceiling_color = create_trgb(0, n_rgb[0], n_rgb[1], n_rgb[2]);
-	return (1);
-}
-
-static int	handle_element(char **split, t_game *game)
-{
-	int i;
-
-	i = 0;
-	while (split[i])
-		i++;
-	if (i != 2)
-		return (0);
-	if (ft_strchr("NSEW", split[0][0]))
-		load_texture(game, split[1], split[0][0]);
-	else
-	{
-		if (!get_floor_ceiling_colors(split[0], split[1], game))
-			return (0);
-	}
-	return (1);
-}
-
-static void	map_elements_set(char *path, t_game *game)
-{
-	int		fd;
-	char	**split;
-	char	*line;
-
-	fd = open(path, O_RDONLY);
-	if (fd == -1)
-		clean_exit(2, "Map loading error\n", game);
-	line = get_next_line(fd);
-	while (line)
-	{
-		if (line[ft_strlen(line) - 1] == '\n')
-			line[ft_strlen(line) - 1] = '\0';
-		if (is_element(line))
-		{
-			split = ft_split(line, ' ');
-			if (!handle_element(split, game))
-			{
-				free2(split);
-				free(line);
-				close(fd);
-				clean_exit(2, "Invalid element\n" , game);
-			}
-			free2(split);
-		}
-		free(line);
-		line = get_next_line(fd);
-	}
-	close(fd);
-}
-
-void	check_elements(char *map_path, t_game *game)
-{
-	int		fd, i;
-	const char	*elements[6] = {""};
-	char	*line;
-
-	fd = open(map_path, O_RDONLY);
-	if (fd == -1)
-		clean_exit(2, "Map loading error\n", game);
-	line = get_next_line(fd);
-	i = 0;
-	while (line && i < 6)
-	{
-		if (*line != '\n' && *line != '\0')
-		{
-			if (ft_strncmp(elements[i], line, ft_strlen(elements[i])))
-			{
-				free(line);
-				close(fd);
-				clean_exit(2, "Missing or invalid element", game);
-			}
-			i++;
-		}
-		free(line);
-		line = get_next_line(fd);
-	}
-	close(fd);
-	if (i < 6)
-		clean_exit(2, "Missing elements in map file", game);
-}
-
 
 static void	init_map_and_player(char *map_path, t_game *game)
 {
 	check_elements(map_path, game);
+	printf("aaaaa\n");
 	map_elements_set(map_path, game);
 	game->map.rows = count_line(map_path);
 	game->map.layout = read_map(map_path, game);

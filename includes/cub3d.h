@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
+/*   By: nakagawashinta <nakagawashinta@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:31:14 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/24 23:47:14 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/28 02:11:32 by nakagawashi      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,8 @@ typedef struct s_column
 // init
 void	argv_checker(int argc, char **argv);
 char	**read_map(char *path, t_game *game);
-char	check_map_obj(char **layout);
 void	check_map(t_game *game);
+int		is_element(char *line);
 void	init_game(char *map_path, t_game *game);
 void	init_player(t_game *game);
 
@@ -136,7 +136,7 @@ void	free_map(t_game *game);
 void	print_layout(char **layout);
 t_image	*get_texture_with_id(t_game *game, unsigned char id);
 void	load_texture(t_game *game, char *filepath, unsigned char id);
-void	mock_map_maker(t_game *game);
+void	change_space_to_zero(t_map *map);
 
 // image utils
 int		create_trgb(int t, int r, int g, int b);
@@ -149,7 +149,7 @@ t_ray	*ray_casting(t_map map, t_player player);
 
 // utils
 int		count_line(char *path);
-int		is_element(char	*line);
+int		is_number(const char *str);
 void	free2(char **p);
 double	limit_angle(double angle);
 double	min(double x1, double x2);

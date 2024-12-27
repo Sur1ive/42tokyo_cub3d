@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   map_checker.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
+/*   By: nakagawashinta <nakagawashinta@student.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 15:52:07 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/19 00:28:51 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/28 02:10:09 by nakagawashi      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-char	check_map_obj(char **layout)
+static char	check_map_obj(char **layout)
 {
 	int		x;
 	int		y;
