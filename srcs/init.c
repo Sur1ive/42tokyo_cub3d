@@ -15,7 +15,7 @@
 void	fill_map(char **map, int cols, t_game *game);
 int		get_max_cols(char **layout);
 void	change_space_to_zero(t_map *map);
-void	check_elements(char *map_path, t_game *game);
+int		check_elements(char *map_path, t_game *game);
 void	map_elements_set(char *path, t_game *game);
 
 static void	game_preset(t_game *game)
@@ -49,8 +49,8 @@ int	is_element(char *line)
 
 static void	init_map_and_player(char *map_path, t_game *game)
 {
-	check_elements(map_path, game);
-	printf("aaaaa\n");
+	if (check_elements(map_path, game) != 0b111111)
+		clean_exit(2, "Map loading error.", game);
 	map_elements_set(map_path, game);
 	game->map.rows = count_line(map_path);
 	game->map.layout = read_map(map_path, game);

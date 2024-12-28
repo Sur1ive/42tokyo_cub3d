@@ -20,7 +20,7 @@ static void	handle_error(char *line, char **split, int fd, t_game *game)
 		free2(split);
 	if (fd != -1)
 		close(fd);
-	clean_exit(2, "Map loading error.", game);
+	clean_exit(2, "Map loading error.\n", game);
 }
 
 static int	get_floor_ceiling_colors(char *color, int n_rgb[3])
@@ -57,8 +57,8 @@ static int	load_element(char **split, t_game *game)
 	int	*f_color;
 	int	*c_color;
 
-	f_color = game->map.floor_color;
-	c_color = game->map.ceiling_color;
+	f_color = &game->map.floor_color;
+	c_color = &game->map.ceiling_color;
 	if (!split || !split[0] || !split[1] || split[2])
 		return (0);
 	if (ft_strchr("NSEW", split[0][0]))
@@ -68,9 +68,9 @@ static int	load_element(char **split, t_game *game)
 		if (!get_floor_ceiling_colors(split[1], n_rgb))
 			return (0);
 		if (!ft_strcmp(split[0], "F"))
-			f_color = create_trgb(0, n_rgb[0], n_rgb[1], n_rgb[2]);
+			*f_color = create_trgb(0, n_rgb[0], n_rgb[1], n_rgb[2]);
 		else
-			c_color = create_trgb(0, n_rgb[0], n_rgb[1], n_rgb[2]);
+			*c_color = create_trgb(0, n_rgb[0], n_rgb[1], n_rgb[2]);
 	}
 	return (1);
 }
@@ -102,7 +102,7 @@ void	map_elements_set(char *path, t_game *game)
 	close(fd);
 }
 
-void	check_elements(char *map_path, t_game *game)
+int	check_elements(char *map_path, t_game *game)
 {
 	int		fd;
 	int		found_flags;
@@ -128,6 +128,5 @@ void	check_elements(char *map_path, t_game *game)
 	}
 	free(line);
 	close(fd);
-	if (found_flags != 0b111111)
-		clean_exit(2, "Missing elements in map file\n", game);
+	return(found_flags);
 }

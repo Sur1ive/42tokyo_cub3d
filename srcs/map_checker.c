@@ -88,9 +88,9 @@ void	check_map(t_game *game)
 
 	map = game->map;
 	if (map.rows > MAX_MAP_ROWS || map.cols > MAX_MAP_COLS)
-		clean_exit(INIT_ERR, "Map is too large", game);
+		clean_exit(INIT_ERR, "Map is too large\n", game);
 	if (!check_map_obj(map.layout))
-		clean_exit(INIT_ERR, "Map must be composed of 01NSEW", game);
+		clean_exit(INIT_ERR, "Map component error.\n", game);
 	if (!check_map_wall(game, map.layout))
-		clean_exit(INIT_ERR, "Map is not closed/surrounded by wall", game);
+		clean_exit(INIT_ERR, "Map is not closed/surrounded by wall\n", game);
 }
