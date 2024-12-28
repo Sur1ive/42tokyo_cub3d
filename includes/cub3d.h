@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:31:14 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/28 12:19:44 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/28 12:34:48 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ void	clean_exit(int exitcode, char *errmsg, t_game *game);
 
 // map utils
 void	free_map(t_game *game);
-void	print_layout(char **layout);
+// void	print_layout(char **layout);
 t_image	*get_texture_with_id(t_game *game, unsigned char id);
 void	load_texture(t_game *game, char *filepath, unsigned char id);
 void	change_space_to_zero(t_map *map);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nakagawashinta <nakagawashinta@student.    +#+  +:+       +#+        */
+/*   By: yxu <yxu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 17:04:34 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/10 22:45:32 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/28 12:34:34 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,20 @@ t_image	*get_texture_with_id(t_game *game, unsigned char id)
 	return (NULL);
 }
 
-void	print_layout(char **layout)
-{
-	int	x;
+// void	print_layout(char **layout)
+// {
+// 	int	x;
 
-	if (layout == NULL)
-		return ;
-	x = 0;
-	while (layout[x])
-	{
-		printf("%s\n", layout[x]);
-		x++;
-	}
-	printf("\n");
-}
+// 	if (layout == NULL)
+// 		return ;
+// 	x = 0;
+// 	while (layout[x])
+// 	{
+// 		printf("%s\n", layout[x]);
+// 		x++;
+// 	}
+// 	printf("\n");
+// }
 
 void	free_map(t_game *game)
 {

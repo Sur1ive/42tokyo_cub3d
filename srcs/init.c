@@ -59,7 +59,6 @@ static void	init_map_and_player(char *map_path, t_game *game)
 	fill_map(game->map.layout, game->map.cols, game);
 	change_space_to_zero(&game->map);
 	check_map(game);
-	print_layout(game->map.layout);
 }
 
 void	init_game(char *map_path, t_game *game)
