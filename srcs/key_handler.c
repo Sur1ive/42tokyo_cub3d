@@ -6,14 +6,14 @@
 /*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 18:01:27 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/08 16:50:34 by yxu              ###   ########.fr       */
+/*   Updated: 2024/12/25 00:05:27 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 #include "key_linux.h"
 
-t_player	player_move(t_player player, int key)
+static t_player	player_move(t_player player, int key)
 {
 	double	direction;
 
@@ -31,7 +31,7 @@ t_player	player_move(t_player player, int key)
 	return (player);
 }
 
-t_player	limit_move(t_map map, t_player player)
+static t_player	limit_move(t_map map, t_player player)
 {
 	double	x;
 	double	y;
@@ -55,6 +55,35 @@ t_player	limit_move(t_map map, t_player player)
 	return (player);
 }
 
+static t_player	limit_move_corner(t_map map, t_player player)
+{
+	double	x;
+	double	y;
+	int		near_e;
+	int		near_s;
+
+	x = player.location.x;
+	y = player.location.y;
+	if (fabs(x - round(x)) < PLAYER_SIZE && fabs(y - round(y)) < PLAYER_SIZE)
+	{
+		near_e = 0;
+		near_s = 0;
+		if (x < round(x))
+			near_e = 1;
+		if (y < round(y))
+			near_s = 1;
+		if (map.layout[(int)round(y) - 1 + near_s][(int)round(x) - 1 + near_e]
+			== '1')
+		{
+			if (fabs(x - round(x)) > fabs(y - round(y)))
+				player.location.x = round(x) + PLAYER_SIZE * (1 - 2 * near_e);
+			else
+				player.location.y = round(y) + PLAYER_SIZE * (1 - 2 * near_s);
+		}
+	}
+	return (player);
+}
+
 int	key_handler(int key, t_game *game)
 {
 	t_player	player;
@@ -65,7 +94,9 @@ int	key_handler(int key, t_game *game)
 	if (key == K_W || key == K_A || key == K_S || key == K_D)
 	{
 		player = player_move(player, key);
-		game->player = limit_move(game->map, player);
+		player = limit_move(game->map, player);
+		player = limit_move_corner(game->map, player);
+		game->player = player;
 	}
 	if (key == K_AR_L)
 		game->player.direction = limit_angle(

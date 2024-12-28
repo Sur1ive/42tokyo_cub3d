@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: yxu <yxu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 13:31:14 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/28 11:45:28 by yxu              ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/12/28 11:57:59 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef CUB3D_H
 # define CUB3D_H
@@ -41,7 +42,7 @@
 # define FOV PI_2
 # define FINENESS 1920
 # define PLAYER_SIZE 0.2
-# define MOVE_SPEED 0.05
+# define MOVE_SPEED 0.05 // must smaller than PLAYER_SIZE
 # define CAMERA_TURN_SPEED 0.05
 
 // element id
