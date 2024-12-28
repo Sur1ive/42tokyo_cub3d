@@ -20,7 +20,7 @@ static int	count_words(char *str, char c)
 	if (str == NULL)
 		return (0);
 	i = 0;
-	num_of_words = 0;
+	num_of_words = 1;
 	while (str[i] != '\0')
 	{
 		if (str[i] == c && str[i])

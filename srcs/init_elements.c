@@ -31,7 +31,7 @@ static int	get_floor_ceiling_colors(char *color, int n_rgb[3])
 	bool	flag;
 
 	flag = false;
-	rgb = ft_split(color, ',');
+	rgb = rgb_split(color, ',');
 	if (!rgb)
 		return (0);
 	i = 0;
@@ -128,5 +128,5 @@ int	check_elements(char *map_path, t_game *game)
 	}
 	free(line);
 	close(fd);
-	return(found_flags);
+	return (found_flags);
 }
