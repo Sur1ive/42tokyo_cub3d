@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #ifndef CUB3D_H
 # define CUB3D_H
 
@@ -153,5 +154,6 @@ int		is_number(const char *str);
 void	free2(char **p);
 double	limit_angle(double angle);
 double	min(double x1, double x2);
+char	**rgb_split(char const *s, char c);
 
 #endif

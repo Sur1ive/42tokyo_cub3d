@@ -2,7 +2,7 @@ NAME	= cub3D
 SRC_DIR = srcs/
 SRCS	= main.c init.c init_player.c init_elements.c exit.c argv_checker.c utils.c key_handler.c\
 		map_checker.c map_utils.c map_parser.c\
-		image_utils.c screenctl.c\
+		image_utils.c screenctl.c rgb_split.c\
 		ray_utils.c ray_casting.c
 SRCS	:= $(addprefix $(SRC_DIR), $(SRCS))
 OBJS	= $(SRCS:.c=.o)
