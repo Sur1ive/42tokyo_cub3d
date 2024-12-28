@@ -114,7 +114,7 @@ int	check_elements(char *map_path, t_game *game)
 		clean_exit(2, "Map loading error\n", game);
 	found_flags = 0;
 	line = get_next_line(fd);
-	while (line && found_flags != 0b111111)
+	while (line)
 	{
 		element_id = is_element(line);
 		if (element_id > 0)
