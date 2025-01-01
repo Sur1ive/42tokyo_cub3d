@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_elements.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nakagawashinta <nakagawashinta@student.    +#+  +:+       +#+        */
+/*   By: anakagaw <anakagaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 02:03:23 by nakagawashi       #+#    #+#             */
-/*   Updated: 2024/12/28 02:12:12 by nakagawashi      ###   ########.fr       */
+/*   Updated: 2025/01/01 17:27:11 by anakagaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,10 @@ static int	load_element(char **split, t_game *game)
 	if (!split || !split[0] || !split[1] || split[2])
 		return (0);
 	if (ft_strchr("NSEW", split[0][0]))
-		load_texture(game, split[1], split[0][0]);
+	{
+		if (!load_texture(game, split[1], split[0][0]))
+			return (0);
+	}
 	else
 	{
 		if (!get_floor_ceiling_colors(split[1], n_rgb))

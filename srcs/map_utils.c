@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yxu <yxu@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: anakagaw <anakagaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 17:04:34 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/28 12:34:34 by yxu              ###   ########.fr       */
+/*   Updated: 2025/01/01 17:23:02 by anakagaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,23 +58,27 @@ void	free_map(t_game *game)
 	free2(game->map.layout);
 }
 
-void	load_texture(t_game *game, char *filepath, unsigned char id)
+int	load_texture(t_game *game, char *filepath, unsigned char id)
 {
 	t_element	*element;
 
 	element = (t_element *)malloc(sizeof(t_element));
 	if (element == NULL)
-		clean_exit(INIT_ERR, "malloc error", game);
+		return (0);
 	element->texture.img = mlx_xpm_file_to_image(game->mlx,
 			filepath, &element->texture.width, &element->texture.height);
 	if (element->texture.img == NULL)
-		clean_exit(INIT_ERR, "error when loading textures", game);
+	{
+		free(element);
+		return (0);
+	}
 	element->texture.addr = mlx_get_data_addr(element->texture.img,
 			&element->texture.bits_per_pixel, &element->texture.line_length,
 			&element->texture.endian);
 	element->id = id;
 	element->next = game->map.elements;
 	game->map.elements = element;
+	return (1);
 }
 
 void	change_space_to_zero(t_map *map)

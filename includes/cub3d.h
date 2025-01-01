@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yxu <yxu@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: anakagaw <anakagaw@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 13:31:14 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/28 12:34:48 by yxu              ###   ########.fr       */
+/*   Updated: 2025/01/01 17:22:48 by anakagaw         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ void	clean_exit(int exitcode, char *errmsg, t_game *game);
 void	free_map(t_game *game);
 // void	print_layout(char **layout);
 t_image	*get_texture_with_id(t_game *game, unsigned char id);
-void	load_texture(t_game *game, char *filepath, unsigned char id);
+int		load_texture(t_game *game, char *filepath, unsigned char id);
 void	change_space_to_zero(t_map *map);
 
 // image utils
