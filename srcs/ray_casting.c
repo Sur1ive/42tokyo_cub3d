@@ -6,7 +6,7 @@
 /*   By: yxu <yxu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 22:41:58 by yxu               #+#    #+#             */
-/*   Updated: 2025/01/01 14:55:05 by yxu              ###   ########.fr       */
+/*   Updated: 2025/01/01 15:02:07 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static t_point	get_wall_location(t_point p, char intersection_direction)
 	else if (floor(p.x) == p.x)
 	{
 		wall.y = floor(p.y);
-		if (intersection_direction == 'W')
+		if (intersection_direction == 'E')
 			wall.x = p.x - 1;
 		else
 			wall.x = p.x;
@@ -32,7 +32,7 @@ static t_point	get_wall_location(t_point p, char intersection_direction)
 	else
 	{
 		wall.x = floor(p.x);
-		if (intersection_direction == 'N')
+		if (intersection_direction == 'S')
 			wall.y = p.y - 1;
 		else
 			wall.y = p.y;

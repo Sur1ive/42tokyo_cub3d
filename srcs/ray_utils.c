@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
+/*   By: yxu <yxu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 22:41:58 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/08 16:11:18 by yxu              ###   ########.fr       */
+/*   Updated: 2025/01/01 15:02:42 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,16 @@ static char	compute_intersection_direction(double x, double y, double k,
 	if (dy < fabs(k * dx))
 	{
 		if (direction > PI)
-			return ('N');
-		else
 			return ('S');
+		else
+			return ('N');
 	}
 	else
 	{
 		if (direction > PI / 2 && direction < PI * 3 / 2)
-			return ('W');
-		else
 			return ('E');
+		else
+			return ('W');
 	}
 }
 
@@ -66,22 +66,22 @@ static void	compute_next_intersection(double *x, double *y, double k,
 	const double	origin_x = *x;
 	const double	origin_y = *y;
 
-	if (intersection_direction == 'N')
+	if (intersection_direction == 'S')
 	{
 		*y = ceil(*y - 1);
 		*x = origin_x + (*y - origin_y) / k;
 	}
-	if (intersection_direction == 'S')
+	if (intersection_direction == 'N')
 	{
 		*y = floor(*y + 1);
 		*x = origin_x + (*y - origin_y) / k;
 	}
-	if (intersection_direction == 'W')
+	if (intersection_direction == 'E')
 	{
 		*x = ceil(*x - 1);
 		*y = origin_y + (*x - origin_x) * k;
 	}
-	if (intersection_direction == 'E')
+	if (intersection_direction == 'W')
 	{
 		*x = floor(*x + 1);
 		*y = origin_y + (*x - origin_x) * k;
