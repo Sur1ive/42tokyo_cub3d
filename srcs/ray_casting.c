@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_casting.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yxu <yxu@student.42tokyo.jp>               +#+  +:+       +#+        */
+/*   By: yxu <yxu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 22:41:58 by yxu               #+#    #+#             */
-/*   Updated: 2024/12/08 17:29:28 by yxu              ###   ########.fr       */
+/*   Updated: 2025/01/01 14:55:05 by yxu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,16 @@ static int	intersection_is_wall(t_map map, t_point p
 	y = wall.y;
 	if (floor(p.x) == p.x && floor(p.y) == p.y)
 	{
-		if (map.layout[y - 1][x] == '1' || map.layout[y][x - 1] == '1'
-		|| map.layout[y][x] == '1' || map.layout[y - 1][x - 1] == '1')
+		if (y - 1 < 0 || x - 1 < 0 || y >= map.rows || x >= map.cols)
+			return (-1);
+		else if (map.layout[y - 1][x] == '1' || map.layout[y][x - 1] == '1'
+			|| map.layout[y][x] == '1' || map.layout[y - 1][x - 1] == '1')
 			return (1);
 		else
 			return (0);
 	}
+	else if (y < 0 || x < 0 || y >= map.rows || x >= map.cols)
+		return (-1);
 	else if (map.layout[y][x] == '1')
 		return (1);
 	else
@@ -66,11 +70,20 @@ static int	intersection_is_wall(t_map map, t_point p
 
 static void	calculate_ray_casting(t_map map, t_ray *ray)
 {
+	int	is_wall;
+
 	ray->tail = ray->origin;
 	while (1)
 	{
 		to_next_intersection(ray);
-		if (intersection_is_wall(map, ray->tail, ray->intersection_direction))
+		is_wall
+			= intersection_is_wall(map, ray->tail, ray->intersection_direction);
+		if (is_wall == -1)
+		{
+			ray->distance = INFINITY;
+			return ;
+		}
+		if (is_wall)
 		{
 			ray->distance = sqrt(
 					pow(ray->tail.x - ray->origin.x, 2)
