@@ -1,5 +1,5 @@
 ![](https://github.com/Sur1ive/42tokyo_piscine/blob/master/42.png)
-# minishell
+# cub3d
 **Final grade: 105%**:white_check_mark:</br>
 
 This project is a 3D renderer created in collaboration with [@ARATA](https://github.com/N-Art157). It utilizes the ray-casting algorithm, famously used in early 3D games like Wolfenstein 3D, to render a 2D map file into a first-person 3D perspective. The engine supports custom wall textures and ceiling/floor colors.
@@ -19,12 +19,17 @@ make
 ./cub3D maps/map.cub
 ```
 
+### Controls
+- `W`, `A`, `S`, `D` Key: Move the camera.
+- `←`, `→` Key: Rotate the camera/view.
+
+
 ### Example Map File
 - `NO`, `SO`, `WE`, `EA`: Path to the texture for North/South/West/East-facing walls.
 - `F`, `C`: RGB color for the Floor and Ceiling.
 - `1`: a solid wall.
 - `0`: empty space.
-- `N`, `S` ,`W` ,`E`: the player's starting position and initial viewing direction
+- `N`, `S` ,`W` ,`E`: the Camera's starting position and initial viewing direction
 ```
 NO ./textures/Textures-1.xpm
 SO ./textures/Textures-2.xpm
